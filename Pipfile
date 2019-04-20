@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+python-language-server = "*"
+pylint = "*"
+mypy = "*"
+ipython = "*"
+black = "==19.3b0"
+pre-commit = "*"
+
+[packages]
+pyssa = "*"
+tellurium = "*"
+
+[requires]
+python_version = "3.6"
