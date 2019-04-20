@@ -505,10 +505,10 @@
         },
         "pyssa": {
             "hashes": [
-                "sha256:5b27b379e8c87a66971132c334795f7683cdbc887dc65025a36035d87c3b159c"
+                "sha256:9c628cac789c92dede8ba6f6285dd7154d0b233fc7288f0be20cd555fe2df592"
             ],
             "index": "pypi",
-            "version": "==0.8.0"
+            "version": "==0.8.2"
         },
         "pytest": {
             "hashes": [
