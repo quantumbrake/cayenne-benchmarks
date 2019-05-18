@@ -49,5 +49,5 @@ if __name__ == "__main__":
 
     te_simulation()
     end_time = time.time()
-    print(f"Elapsed time in seconds: {start_time - end_time}")
+    print(f"Elapsed time in seconds: {end_time - start_time }")
     plot_results()
