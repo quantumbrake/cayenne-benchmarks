@@ -105,3 +105,7 @@ venv.bak/
 
 # tags
 tags
+
+# profilers
+line_profiler
+pyflame
