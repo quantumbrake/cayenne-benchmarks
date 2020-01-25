@@ -22,12 +22,13 @@ function runmodel1()
     model <= Reaction("conv", k4, "S2 --> S3")
 
     # simulation parameters
-    nrep = 10
+    nrep = 200
     time_final = 10.0
     epochs = 1000000
 
     # simulate
-    result = simulate(model, Direct(), time = time_final, epochs = epochs, trials = nrep)
+    #= result = simulate(model, Direct(), time = time_final, epochs = epochs, trials = nrep) =#
+    result = simulate(model, Direct(), time = time_final, trials = nrep, output_type=Val(:full))
 end
 
 @time runmodel1()

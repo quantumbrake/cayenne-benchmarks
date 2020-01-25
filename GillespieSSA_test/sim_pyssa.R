@@ -2,14 +2,11 @@
 
 library(GillespieSSA)
 
-parms <- c(k1=1.0, k2=0.002, k3=0.5, k4=0.04)  # Define parameters
-x0 <- c(S1=4150, S2=39565, S3=3445)                  # Initial state vector
-nu <- matrix(c(-1, -2, +2,  0,                 # State-change matrix
-                0, +1, -1, -1,
-                0,  0,  0, +1),
-                nrow=3,byrow=TRUE)
-a  <- c("k1*S1", "k2*S1*(S1-1)", "k3*S2", "k4*S2") # Propensity vector
-tf <- 10                                       # Final time
+parms <- c(k1=1.0, k2=1.1)  # Define parameters
+x0 <- c(S1=100)                  # Initial state vector
+nu <- matrix(c(1, -1), nrow=1,byrow=TRUE)
+a  <- c("k1*S1", "k2*S1") # Propensity vector
+tf <- 50                                       # Final time
 simName <- "Decaying-Dimerizing Reaction Set"
 
 # Run simulations 
@@ -37,7 +34,7 @@ start_time = Sys.time()
 # OTL
 for (i in 1:10) {
     out <- ssa(x0,a,nu,parms,tf,method='D',simName,verbose=FALSE,consoleInterval=1) 
-    write.table(out$data, file="output.csv", sep=",", row.names=FALSE)
+    write.table(out$data, file=paste(i, ".csv", sep=""), sep=",", row.names=FALSE)
 }
 end_time = Sys.time()
 print(paste("Time elapsed in seconds:", end_time - start_time))

@@ -23,15 +23,15 @@ def te_simulation():
     te_model = te.loada(model)
     te_model.integrator = "gillespie"
     # te_model.integrator.seed = 1234
-    te_model.integrator.variable_step_size = True
+    te_model.integrator.variable_step_size = False
 
-    nrep = 10
+    nrep = 50
     points = 1_000_000
 
     sim_list = []
     for i in range(nrep):
         te_model.reset()
-        sim = te_model.simulate(0, 10, steps=points)
+        sim = te_model.simulate(0, 50, steps=50)
         sim_list.append(sim)
         te_model.plot(sim, alpha=0.7, show=False)
 
