@@ -113,3 +113,6 @@ pyflame
 # data directories
 data/
 results/
+
+# plots
+.pdf
