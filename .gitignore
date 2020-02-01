@@ -109,3 +109,7 @@ tags
 # profilers
 line_profiler
 pyflame
+
+# data directories
+data/
+results/
