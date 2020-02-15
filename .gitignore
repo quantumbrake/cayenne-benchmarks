@@ -115,3 +115,6 @@ results/
 
 # plots
 .pdf
+
+# vscode settings
+.vscode
