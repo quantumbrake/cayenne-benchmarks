@@ -8,7 +8,7 @@ id_ = sys.argv[1]
 library = sys.argv[2]
 algo = sys.argv[3]
 
-two_species_models = ["00030"]
+two_species_models = ["00030", "00031"]
 
 if id_ not in two_species_models:
     time_list, mu_list, std_list = read_results(id_)
