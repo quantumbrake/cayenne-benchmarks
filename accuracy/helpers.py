@@ -173,7 +173,7 @@ def process_r_2sp(model="00030", library="GillespieSSA", algo="direct", n_reps=N
     if n_reps is None:
         n_reps = get_highest_rep_in_path(res_folder)
 
-    for rep_no in range(1, 10):
+    for rep_no in range(1, n_reps + 1):
         contents = np.loadtxt(res_folder + f"{rep_no}.csv", delimiter=",")
         t_list.append(contents[:, 0])
         this_x = contents[:, 1:]
