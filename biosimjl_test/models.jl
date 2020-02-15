@@ -58,16 +58,6 @@ function model_00011()
     return model
 end
 
-function model_00011()
-    model = Network("Model 00011")
-    model <= Species("S1", 100)
-    k1 = 0.1 / 2
-    k2 = 0.11 / 2
-    model <= Reaction("birth", k1, "S1 --> S1 + S1")
-    model <= Reaction("death", k2, "S1 --> 0")
-    return model
-end
-
 ####################
 # System 2
 ####################
