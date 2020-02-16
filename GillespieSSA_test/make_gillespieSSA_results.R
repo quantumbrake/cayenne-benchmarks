@@ -139,15 +139,19 @@ get_model <- function(model_str="00001"){
   return (retlist)
 }
 
-model_name="00020"
-nrep = 5
+args = commandArgs(trailingOnly=TRUE)
+model_name = args[1]
+algo_name = args[2]
+nrep = args[3]
 res = get_model(model_name)
-algo_name = "otl"
+
 if (algo_name == "otl"){
   algo = ssa.otl()
 } else if (algo_name == "direct"){
   algo = ssa.d()
-} else{
+} else if (algo_name == "etl"){
+  algo = ssa.etl(tau=0.1)
+} else {
   print("Bad algorithm");
   return (0)
 }
