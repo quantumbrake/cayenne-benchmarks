@@ -103,6 +103,9 @@ def calculate_zy(res: Results, time_list: list, mu_list: list, std_list: list):
     z_list = []
     y_list = []
     n_rep = len(res.t_list)
+    mu_obs_list = np.zeros(len(time_list),)
+    std_obs_list = np.zeros(len(time_list),)
+
     for ind1, t in enumerate(time_list[1:]):
         results = res.get_state(t)
         mu_obs = np.mean(results)
@@ -113,8 +116,10 @@ def calculate_zy(res: Results, time_list: list, mu_list: list, std_list: list):
         y_list.append(
             np.sqrt(n_rep / 2) * ((std_obs ** 2) / (std_list[ind1 + 1] ** 2) - 1)
         )
+        mu_obs_list[ind1] = mu_obs
+        std_obs_list[ind1] = std_obs
         # print(f"From zy : ind={ind1}, t={t}, (mu_data, mu_obs, z, denom, num) = ({mu_list[ind1+1]}, {mu_obs}, {z_list[-1]:.2f}, {std_list[ind1+1]}, {np.sqrt(n_rep):.2f})")
-    return np.array(z_list), np.array(y_list)
+    return np.array(z_list), np.array(y_list), mu_obs_list, std_obs_list
 
 
 def calculate_zy_2sp(res: Results, time_list: list, mu_list: list, std_list: list):
