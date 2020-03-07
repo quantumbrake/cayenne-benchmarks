@@ -1,6 +1,8 @@
 import csv
 import pathlib
 import numpy as np
+import matplotlib.pyplot as plt
+
 from pyssa.results import Results
 
 # TODO: see if we want to use this
@@ -187,3 +189,35 @@ def process_r_2sp(model="00030", library="GillespieSSA", algo="direct", n_reps=N
         sim_seeds.append(0)
     res = Results(t_list, x_list, status_list, algo, sim_seeds)
     return res
+
+
+def make_plot(time_list, mu_list, std_list, mu_obs_list, std_obs_list, Z, Y, plt_name):
+    """Plot simulations vs original values.
+
+    Make a plot to compare simulations vs original values.
+
+    Plot 1
+    ------
+    Time series of mu_analytical and mu_obs, with the std_list and std_obs
+    as errors.
+    """
+    plt.subplot(121)
+    plt.plot(time_list, mu_obs_list)
+    for i in range(len(Z)):
+        if -3 <= Z[i] <= 3:
+            marker = "green"
+        else:
+            marker = "red"
+        plt.plot(time_list[i + 1], mu_list[i + 1], "o", color=marker)
+    plt.hlines(0, 0, 50)
+    plt.ylabel("Observed mean")
+    plt.subplot(122)
+    plt.plot(time_list, std_obs_list)
+    for i in range(len(Y)):
+        if -5 <= Y[i] <= 5:
+            marker = "green"
+        else:
+            marker = "red"
+        plt.plot(time_list[i + 1], std_list[i + 1], "o", color=marker)
+    plt.ylabel("Observed SD")
+    plt.savefig(plt_name)
