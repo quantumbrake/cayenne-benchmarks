@@ -1,10 +1,19 @@
 import sys
-from .helpers import calculate_zy, read_results, process_r, make_plot
-from .helpers import read_results_2sp, calculate_zy_2sp, process_r_2sp
+from .helpers import (
+    calculate_zy,
+    read_results_analytical,
+    read_results_simulation,
+    make_plot,
+)
+from .helpers import (
+    read_results_analytical_2sp,
+    calculate_zy_2sp,
+    read_results_simulation_2sp,
+)
 import numpy as np
 
 
-def test_accuracy(id_:str, library:str, algo:str, nrep:int):
+def test_accuracy(id_: str, library: str, algo: str, nrep: int):
     """Test the accuracy for a given model, library, algorithm and number
     of reps.
 
@@ -29,8 +38,8 @@ def test_accuracy(id_:str, library:str, algo:str, nrep:int):
 
     plt_name = f"plots/{library}_{algo}_{id_}_{nrep}.pdf"
     if id_ not in two_species_models:
-        time_list, mu_list, std_list = read_results(id_)
-        res = process_r(id_, library=library, algo=algo, n_reps=nrep)
+        time_list, mu_list, std_list = read_results_analytical(id_)
+        res = read_results_simulation(id_, library=library, algo=algo, n_reps=nrep)
         Z, Y, mu_obs_list, std_obs_list = calculate_zy(
             res, time_list, mu_list, std_list
         )
@@ -39,8 +48,8 @@ def test_accuracy(id_:str, library:str, algo:str, nrep:int):
         )
     else:
         print("Using 2 species")
-        time_list, mu_list, std_list = read_results_2sp(id_)
-        res = process_r_2sp(id_, library=library, algo=algo, n_reps=nrep)
+        time_list, mu_list, std_list = read_results_analytical_2sp(id_)
+        res = read_results_simulation_2sp(id_, library=library, algo=algo, n_reps=nrep)
         Z, Y = calculate_zy_2sp(res, time_list, mu_list, std_list)
 
     # TODO: Does this work for two species?

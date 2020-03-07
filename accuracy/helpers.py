@@ -5,12 +5,8 @@ import matplotlib.pyplot as plt
 
 from pyssa.results import Results
 
-# TODO: see if we want to use this
-# CURR_DIR = pathlib.Path(__file__).parent
-# DATA_DIR = CURR_DIR.parent / "data"
 
-
-def read_results(test_id: str):
+def read_results_analytical(test_id: str):
     """
         Read the simulation results used for accuracy tests.
 
@@ -31,7 +27,7 @@ def read_results(test_id: str):
 
         See Also
         --------
-        read_results_2sp: Read results for 2 species.
+        read_results_analytical_2sp: Read results for 2 species.
 
         Notes
         -----
@@ -55,7 +51,7 @@ def read_results(test_id: str):
     return time_list, mu_list, std_list
 
 
-def read_results_2sp(test_id: str):
+def read_results_analytical_2sp(test_id: str):
     """
         Read the simulation results used for accuracy tests when 2 species
         are tracked.
@@ -77,7 +73,7 @@ def read_results_2sp(test_id: str):
 
         See Also
         --------
-        read_results: Read results for one species.
+        read_results_analytical: Read results for one species.
 
         Notes
         -----
@@ -150,7 +146,9 @@ def get_highest_rep_in_path(this_path: str):
     return highest_rep
 
 
-def process_r(model="00001", library="GillespieSSA", algo="direct", n_reps=None):
+def read_results_simulation(
+    model="00001", library="GillespieSSA", algo="direct", n_reps=None
+):
     x_list = []
     t_list = []
     status_list = []
@@ -171,7 +169,9 @@ def process_r(model="00001", library="GillespieSSA", algo="direct", n_reps=None)
     return res
 
 
-def process_r_2sp(model="00030", library="GillespieSSA", algo="direct", n_reps=None):
+def read_results_simulation_2sp(
+    model="00030", library="GillespieSSA", algo="direct", n_reps=None
+):
     x_list = []
     t_list = []
     status_list = []
