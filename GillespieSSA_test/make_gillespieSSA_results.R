@@ -21,6 +21,15 @@ get_model <- function(model_str="00001"){
     tf <- 51                                       # Final time
     simName <- "Birth-Death Reaction Set"
   }
+  else if (model_str == "00004"){
+    parms <- c(k1=0.1, k2=0.11) # Define parameters
+    x0 <- c(S1=10) # Initial state vector
+    nu <- matrix(c(+1, -1),
+                 nrow=1,byrow=TRUE)
+    a <- c("k1*S1", "k2*S1") # Propensity vector
+    tf <- 51 # Final time
+    simName <- "Birth-Death Reaction Set"
+  }
   else if (model_str == "00005"){
     parms <- c(k1=0.1, k2=0.11)  # Define parameters
     x0 <- c(S1=10000)                  # Initial state vector
@@ -145,11 +154,11 @@ algo_name = args[2]
 nrep = args[3]
 res = get_model(model_name)
 
-if (algo_name == "otl"){
+if (algo_name == "tau_adaptive"){
   algo = ssa.otl()
 } else if (algo_name == "direct"){
   algo = ssa.d()
-} else if (algo_name == "etl"){
+} else if (algo_name == "tau_leaping"){
   algo = ssa.etl(tau=0.1)
 } else {
   print("Bad algorithm");
@@ -163,5 +172,8 @@ for (i in 1:nrep) {
   # fname = paste("..\\results\\",model_name, "\\GillespieSSA_otl\\", i, ".csv", sep="")
   out <- ssa(res$x0,res$a,res$nu,res$parms,res$tf,method=algo,res$simName,verbose=FALSE,consoleInterval=1)
   write.table(out$data, quote=FALSE, row.names=FALSE, col.names=FALSE, sep=",", file=fname)
+}
+
+row.names=FALSE, col.names=FALSE, sep=",", file=fname)
 }
 
