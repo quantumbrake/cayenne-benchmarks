@@ -1,6 +1,8 @@
 import csv
 import pathlib
+
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 from pyssa.results import Results
@@ -38,17 +40,12 @@ def read_results_analytical(test_id: str):
         .. [1] https://github.com/sbmlteam/sbml-test-suite/tree/master/cases/stochastic
     """
     filename = f"data/results_{test_id}.csv"
-    time_list = []
-    mu_list = []
-    std_list = []
-    with open(filename) as fid:
-        csv_reader = csv.reader(fid, delimiter=",")
-        next(csv_reader)
-        for time, mu, std in csv_reader:
-            time_list.append(float(time))
-            mu_list.append(float(mu))
-            std_list.append(float(std))
-    return time_list, mu_list, std_list
+    # time,X-mean,X-sd
+    data = pd.read_csv(filename)
+    time = data["time"].values
+    mu = data["X-mean"].values
+    std = data["X-sd"].values
+    return time, mu, std
 
 
 def read_results_analytical_2sp(test_id: str):
@@ -84,17 +81,16 @@ def read_results_analytical_2sp(test_id: str):
         .. [1] https://github.com/sbmlteam/sbml-test-suite/tree/master/cases/stochastic
     """
     filename = f"data/results_{test_id}.csv"
-    time_list = []
-    mu_list = []
-    std_list = []
-    with open(filename) as fid:
-        csv_reader = csv.reader(fid, delimiter=",")
-        next(csv_reader)
-        for time, mu1, mu2, std1, std2 in csv_reader:
-            time_list.append(float(time))
-            mu_list.append(np.array([float(mu1), float(mu2)]))
-            std_list.append(np.array([float(std1), float(std2)]))
-    return time_list, mu_list, std_list
+    # time, X-mean, X-sd
+    data = pd.read_csv(filename)
+    time = data["time"].values
+    p_mean = data["P-mean"].values.reshape(-1, 1)
+    p2_mean = data["P2-mean"].values.reshape(-1, 1)
+    mu = np.hstack([p_mean, p2_mean])
+    p_sd = data["P-sd"].values.reshape(-1, 1)
+    p2_sd = data["P2-sd"].values.reshape(-1, 1)
+    std = np.hstack([p_sd, p2_sd])
+    return time, mu, std
 
 
 def calculate_zy(res: Results, time_list: list, mu_list: list, std_list: list):
