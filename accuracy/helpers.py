@@ -1,4 +1,3 @@
-import csv
 import pathlib
 
 import numpy as np
@@ -127,8 +126,8 @@ def calculate_zy(
     z_list = []
     y_list = []
     n_rep = len(res.t_list)
-    mu_obs_arr = np.zeros(len(time_arr),)
-    std_obs_arr = np.zeros(len(time_arr),)
+    mu_obs_arr = np.zeros(len(time_arr))
+    std_obs_arr = np.zeros(len(time_arr))
     mu_obs_arr[0] = mu_analytical[0]
 
     for ind1, t in enumerate(time_arr[1:]):
@@ -283,33 +282,132 @@ def read_results_simulation_2sp(
     return res
 
 
-def make_plot(time_list, mu_list, std_list, mu_obs_list, std_obs_list, Z, Y, plt_name):
+def make_overlay_plot(
+    time_pts: np.array,
+    value_obs: np.array,
+    value_analytical: np.array,
+    stat: np.array,
+    stat_thresh: float,
+    ax,
+):
+    """Make an overlay plot.
+
+    Overlay the analytical and observed values across time. Color the
+    points which violate statistical thresholds differently.
+
+    Parameters
+    ----------
+    time_pts
+        Numpy array of time points.
+    value_obs
+        Observed values at each time point.
+    value_analytical
+        Analytical values at each time point.
+    stat
+        Statistic at each time point.
+    stat_thresh
+        Statistic threshold to color by, same for all time points.
+    ax
+        Axis object to plot on.
+    """
+    ax.plot(time_pts, value_obs)
+    for i in range(len(stat)):
+        if -stat_thresh <= stat[i] <= stat_thresh:
+            marker = "green"
+        else:
+            marker = "red"
+        ax.plot(time_pts[i + 1], value_analytical[i + 1], ".", color=marker)
+
+
+def make_plot(
+    time_arr: np.array,
+    mu_analytical: np.array,
+    std_analytical: np.array,
+    mu_obs: np.array,
+    std_obs: np.array,
+    Z: np.array,
+    Y: np.array,
+    plt_name: str,
+):
     """Plot simulations vs original values.
 
     Make a plot to compare simulations vs original values.
 
-    Plot 1
-    ------
-    Time series of mu_analytical and mu_obs, with the std_list and std_obs
-    as errors.
+    Parameters
+    ----------
+    time_arr
+        List of time points at which analytical solutions are available.
+    mu_analytical
+        List of analytical means at the time points in ``time_arr``.
+    std_analytical
+        List of analytical standard deviations at the time points in
+        ``time_arr``.
+    mu_obs
+        Numpy array of observed mean values.
+    std_obs
+        Numpy array of observed standard deviation values.
+    Z
+        Numpy array of calculated Z values.
+    Y
+        Numpy array of calculated Y values.
     """
     plt.subplot(121)
-    plt.plot(time_list, mu_obs_list)
-    for i in range(len(Z)):
-        if -3 <= Z[i] <= 3:
-            marker = "green"
-        else:
-            marker = "red"
-        plt.plot(time_list[i + 1], mu_list[i + 1], "o", color=marker)
-    plt.hlines(0, 0, 50)
-    plt.ylabel("Observed mean")
+    ax = plt.gca()
+    make_overlay_plot(time_arr, mu_obs, mu_analytical, Z, 3, ax)
+    ax.set_ylabel("Observed mean")
     plt.subplot(122)
-    plt.plot(time_list, std_obs_list)
-    for i in range(len(Y)):
-        if -5 <= Y[i] <= 5:
-            marker = "green"
-        else:
-            marker = "red"
-        plt.plot(time_list[i + 1], std_list[i + 1], "o", color=marker)
-    plt.ylabel("Observed SD")
+    ax = plt.gca()
+    make_overlay_plot(time_arr, std_obs, std_analytical, Y, 5, ax)
+    ax.set_ylabel("Observed sd")
+    plt.savefig(plt_name)
+
+
+def make_plot_2sp(
+    time_arr: np.array,
+    mu_analytical: np.array,
+    std_analytical: np.array,
+    mu_obs: np.array,
+    std_obs: np.array,
+    Z: np.array,
+    Y: np.array,
+    plt_name: str,
+):
+    """Plot simulations vs original values.
+
+    Make a plot to compare simulations vs original values.
+
+    Parameters
+    ----------
+    time_arr
+        List of time points at which analytical solutions are available.
+    mu_analytical
+        List of analytical means at the time points in ``time_arr``.
+    std_analytical
+        List of analytical standard deviations at the time points in
+        ``time_arr``.
+    mu_obs
+        Numpy array of observed mean values.
+    std_obs
+        Numpy array of observed standard deviation values.
+    Z
+        Numpy array of calculated Z values.
+    Y
+        Numpy array of calculated Y values.
+    """
+    plt.subplot(221)
+    ax = plt.gca()
+    make_overlay_plot(time_arr, mu_obs[:, 0], mu_analytical[:, 0], Z[:, 0], 3, ax)
+    ax.set_ylabel("Observed mean - S1")
+    plt.subplot(222)
+    ax = plt.gca()
+    make_overlay_plot(time_arr, std_obs[:, 0], std_analytical[:, 0], Y[:, 0], 5, ax)
+    ax.set_ylabel("Observed sd - S1")
+    plt.subplot(223)
+    ax = plt.gca()
+    make_overlay_plot(time_arr, mu_obs[:, 1], mu_analytical[:, 1], Z[:, 1], 3, ax)
+    ax.set_ylabel("Observed mean - S2")
+    plt.subplot(224)
+    ax = plt.gca()
+    make_overlay_plot(time_arr, std_obs[:, 1], std_analytical[:, 1], Y[:, 1], 5, ax)
+    ax.set_ylabel("Observed sd - S2")
     plt.savefig(plt_name)
