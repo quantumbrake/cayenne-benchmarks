@@ -4,6 +4,7 @@ from .helpers import (
     read_results_analytical,
     read_results_simulation,
     make_plot,
+    make_plot_2sp,
 )
 from .helpers import (
     read_results_analytical_2sp,
@@ -12,7 +13,7 @@ from .helpers import (
 )
 import numpy as np
 
-
+# @profile
 def test_accuracy(id_: str, library: str, algo: str, nrep: int):
     """Test the accuracy for a given model, library, algorithm and number
     of reps.
@@ -50,7 +51,12 @@ def test_accuracy(id_: str, library: str, algo: str, nrep: int):
         print("Using 2 species")
         time_list, mu_list, std_list = read_results_analytical_2sp(id_)
         res = read_results_simulation_2sp(id_, library=library, algo=algo, n_reps=nrep)
-        Z, Y = calculate_zy_2sp(res, time_list, mu_list, std_list)
+        Z, Y, mu_obs_list, std_obs_list = calculate_zy_2sp(
+            res, time_list, mu_list, std_list
+        )
+        make_plot_2sp(
+            time_list, mu_list, std_list, mu_obs_list, std_obs_list, Z, Y, plt_name
+        )
 
     # TODO: Does this work for two species?
     failed_list = [None, None, None, None]
