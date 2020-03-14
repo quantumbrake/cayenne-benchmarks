@@ -227,11 +227,9 @@ def read_results_simulation(
         n_reps = get_highest_rep_in_path(res_folder)
 
     for rep_no in range(1, n_reps + 1):
-        contents = np.loadtxt(res_folder + f"{rep_no}.csv", delimiter=",")
-        t_list.append(contents[:, 0])
-        this_x = contents[:, 1]
-        this_x = this_x.reshape(len(this_x), 1)
-        x_list.append(this_x)
+        contents = pd.read_csv(res_folder + f"{rep_no}.csv", names=["time", "S1"])
+        t_list.append(contents["time"].values)
+        x_list.append(contents["S1"].values.reshape(contents.shape[0], 1))
         status_list.append(0)
         sim_seeds.append(0)
     res = Results(t_list, x_list, status_list, algo, sim_seeds)
@@ -250,10 +248,9 @@ def read_results_simulation_2sp(
         n_reps = get_highest_rep_in_path(res_folder)
 
     for rep_no in range(1, n_reps + 1):
-        contents = np.loadtxt(res_folder + f"{rep_no}.csv", delimiter=",")
-        t_list.append(contents[:, 0])
-        this_x = contents[:, 1:]
-        x_list.append(this_x)
+        contents = pd.read_csv(res_folder + f"{rep_no}.csv", names=["time", "S1", "S2"])
+        t_list.append(contents["time"].values)
+        x_list.append(contents[["S1", "S2"]].values)
         status_list.append(0)
         sim_seeds.append(0)
     res = Results(t_list, x_list, status_list, algo, sim_seeds)
