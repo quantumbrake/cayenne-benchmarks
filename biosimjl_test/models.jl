@@ -110,7 +110,7 @@ function model_00030()
     model = Network("Model 00030")
     model <= Species("S1", 100)
     model <= Species("S2", 0)
-    k1 = 0.001 / 2
+    k1 = 0.001
     k2 = 0.01
     model <= Reaction("dimerization", k1, "S1 + S1 --> S2")
     model <= Reaction("monomerization", k2, "S2 --> S1 + S1")
@@ -121,7 +121,7 @@ function model_00031()
     model = Network("Model 00031")
     model <= Species("S1", 1000)
     model <= Species("S2", 0)
-    k1 = 0.0002 / 2
+    k1 = 0.0002
     k2 = 0.004
     model <= Reaction("dimerization", k1, "S1 + S1 --> S2")
     model <= Reaction("monomerization", k2, "S2 --> S1 + S1")
