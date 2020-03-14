@@ -216,8 +216,34 @@ def get_highest_rep_in_path(this_path: str):
 
 
 def read_results_simulation(
-    model="00001", library="GillespieSSA", algo="direct", n_reps=None
+    model: str = "00001",
+    library: str = "GillespieSSA",
+    algo: str = "direct",
+    n_reps: str = None,
 ):
+    """Read simulation results.
+
+    Given a model, library and algorithm, read the results. If `n_reps` is also
+    provided, read only the first `n_rep` results. If not, read as many as
+    there are in the folder for that model/library/algorithm combination..2f
+
+    Parameters
+    ----------
+    model
+        Model id.
+    library
+        Name of the library.
+    algo
+        Name of the algorithm.
+    n_reps
+        Number of reps to read the simulation results for. Default is `None`
+        and all results are read.
+
+    Returns
+    -------
+    res: Results
+        A `pyssa.Results` object containing the results.
+    """
     x_list = []
     t_list = []
     status_list = []
