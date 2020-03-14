@@ -93,45 +93,118 @@ def read_results_analytical_2sp(test_id: str):
     return time, mu, std
 
 
-def calculate_zy(res: Results, time_list: list, mu_list: list, std_list: list):
+def calculate_zy(
+    res: Results, time_arr: np.array, mu_analytical: np.array, std_analytical: np.array
+):
+    """Calculate Z and Y.
+
+    For a given simulation result and the analytical mean and standard
+    deviations, compute the Z and Y statistics for each time point.
+
+    Parameters
+    ----------
+    res
+        A pyssa.Results object.
+    time_arr
+        List of time points at which analytical solutions are available.
+    mu_analytical
+        List of analytical means at the time points in ``time_arr``.
+    std_analytical
+        List of analytical standard deviations at the time points in
+        ``time_arr``.
+
+    Returns
+    -------
+    z_arr
+        Numpy array of calculated Z values.
+    y_arr
+        Numpy array of calculated Y values.
+    mu_obs_arr
+        Numpy array of observed mean values.
+    std_obs_arr
+        Numpy array of observed standard deviation values.
+    """
     z_list = []
     y_list = []
     n_rep = len(res.t_list)
-    mu_obs_list = np.zeros(len(time_list),)
-    std_obs_list = np.zeros(len(time_list),)
+    mu_obs_arr = np.zeros(len(time_arr),)
+    std_obs_arr = np.zeros(len(time_arr),)
+    mu_obs_arr[0] = mu_analytical[0]
 
-    for ind1, t in enumerate(time_list[1:]):
+    for ind1, t in enumerate(time_arr[1:]):
         results = res.get_state(t)
         mu_obs = np.mean(results)
         std_obs = np.std(results)
         z_list.append(
-            np.sqrt(n_rep) * (mu_obs - mu_list[ind1 + 1]) / std_list[ind1 + 1]
+            np.sqrt(n_rep)
+            * (mu_obs - mu_analytical[ind1 + 1])
+            / std_analytical[ind1 + 1]
         )
         y_list.append(
-            np.sqrt(n_rep / 2) * ((std_obs ** 2) / (std_list[ind1 + 1] ** 2) - 1)
+            np.sqrt(n_rep / 2) * ((std_obs ** 2) / (std_analytical[ind1 + 1] ** 2) - 1)
         )
-        mu_obs_list[ind1] = mu_obs
-        std_obs_list[ind1] = std_obs
-        # print(f"From zy : ind={ind1}, t={t}, (mu_data, mu_obs, z, denom, num) = ({mu_list[ind1+1]}, {mu_obs}, {z_list[-1]:.2f}, {std_list[ind1+1]}, {np.sqrt(n_rep):.2f})")
-    return np.array(z_list), np.array(y_list), mu_obs_list, std_obs_list
+        mu_obs_arr[ind1 + 1] = mu_obs
+        std_obs_arr[ind1 + 1] = std_obs
+    z_arr = np.array(z_list)
+    y_arr = np.array(y_list)
+    return z_arr, y_arr, mu_obs_arr, std_obs_arr
 
 
-def calculate_zy_2sp(res: Results, time_list: list, mu_list: list, std_list: list):
+def calculate_zy_2sp(
+    res: Results, time_arr: np.array, mu_analytical: np.array, std_analytical: np.array
+):
+    """Calculate Z and Y for simulations with 2 species.
+
+    For a given simulation result and the analytical mean and standard
+    deviations, compute the Z and Y statistics for each time point.
+
+    Parameters
+    ----------
+    res
+        A pyssa.Results object.
+    time_arr
+        List of time points at which analytical solutions are available.
+    mu_analytical
+        List of analytical means at the time points in ``time_arr``.
+    std_analytical
+        List of analytical standard deviations at the time points in
+        ``time_arr``.
+
+    Returns
+    -------
+    z_arr
+        Numpy array of calculated Z values.
+    y_arr
+        Numpy array of calculated Y values.
+    mu_obs_arr
+        Numpy array of observed mean values.
+    std_obs_arr
+        Numpy array of observed standard deviation values.
+    """
     z_list = []
     y_list = []
     n_rep = len(res.t_list)
-    for ind1, t in enumerate(time_list[1:]):
+    mu_obs_list = [mu_analytical[0, :]]
+    std_obs_list = [[0.0, 0.0]]
+    for ind1, t in enumerate(time_arr[1:]):
         results = res.get_state(t)
         mu_obs = np.mean(results, axis=0)
         std_obs = np.std(results, axis=0)
-        # print("While calculating zy, : ", ind1, t, results, mu_obs, mu_list[ind1+1], std_obs, std_list[ind1+1])
         z_list.append(
-            np.sqrt(n_rep) * (mu_obs - mu_list[ind1 + 1]) / std_list[ind1 + 1]
+            np.sqrt(n_rep)
+            * (mu_obs - mu_analytical[ind1 + 1])
+            / std_analytical[ind1 + 1]
         )
         y_list.append(
-            np.sqrt(n_rep / 2) * ((std_obs ** 2) / (std_list[ind1 + 1] ** 2) - 1)
+            np.sqrt(n_rep / 2) * ((std_obs ** 2) / (std_analytical[ind1 + 1] ** 2) - 1)
         )
-    return np.array(z_list), np.array(y_list)
+        mu_obs_list.append(mu_obs)
+        std_obs_list.append(std_obs)
+    z_arr = np.array(z_list)
+    y_arr = np.array(y_list)
+    mu_obs_arr = np.array(mu_obs_list)
+    std_obs_arr = np.array(std_obs_list)
+    return z_arr, y_arr, mu_obs_arr, std_obs_arr
 
 
 def get_highest_rep_in_path(this_path: str):
