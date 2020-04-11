@@ -38,6 +38,10 @@ if __name__ == "__main__":
     MODEL_ID = sys.argv[1]
     ALGO = sys.argv[2]
     N_REPS = int(sys.argv[3])
+    WRITE_RESULTS_FLAG = sys.argv[4]
     DIR_PATH = pathlib.Path(f"./results/{MODEL_ID}/pyssa_{ALGO}/")
     results = run_model(MODEL_ID, ALGO, N_REPS)
-    write_model(results, DIR_PATH, N_REPS)
+    if WRITE_RESULTS_FLAG == "True":
+        write_model(results, DIR_PATH, N_REPS)
+    else:
+        print("Not saving results")

@@ -28,7 +28,6 @@ function run_model(model, algorithm, nreps, interpolation)
 end
 
 function write_results(results, dir_name, nspecies)
-    print(results)
     mkpath(dir_name)
     for i = 1:length(results)
         file_name = string(dir_name, i, ".csv")
@@ -41,6 +40,7 @@ model_name = ARGS[1]
 algorithm = ARGS[2]
 nreps = parse(Int64, ARGS[3])
 interpolation = ARGS[4]
+write_results_flag = ARGS[5]
 model = get_model(model_name)
 if model_name == "00030" || model_name == "00031"
     nspecies = 2
@@ -50,4 +50,8 @@ end
 results = run_model(model, algorithm, nreps, interpolation)
 folder_name = interpolation == "True" ? "/BioSimulatorIntp_" : "/BioSimulator_"
 dir_name = string("./results/", model_name, folder_name, algorithm, "/")
-write_results(results, dir_name, nspecies)
+if write_results_flag == "True"
+    write_results(results, dir_name, nspecies)
+else
+    print("Not saving results")
+end

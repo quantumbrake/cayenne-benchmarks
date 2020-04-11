@@ -35,6 +35,10 @@ def write_model(results, dir_path, n_reps):
 if __name__ == "__main__":
     MODEL_ID = sys.argv[1]
     N_REPS = int(sys.argv[2])
+    WRITE_RESULTS_FLAG = sys.argv[3]
     DIR_PATH = pathlib.Path(f"./results/{MODEL_ID}/Tellurium_direct/")
     results = run_model(MODEL_ID, N_REPS)
-    write_model(results, DIR_PATH, N_REPS)
+    if WRITE_RESULTS_FLAG == "True":
+        write_model(results, DIR_PATH, N_REPS)
+    else:
+        print("Not saving results")

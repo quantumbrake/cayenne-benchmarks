@@ -152,6 +152,7 @@ args = commandArgs(trailingOnly=TRUE)
 model_name = args[1]
 algo_name = args[2]
 nrep = args[3]
+write_results_flag = args[4]
 res = get_model(model_name)
 
 if (algo_name == "tau_adaptive"){
@@ -167,13 +168,17 @@ if (algo_name == "tau_adaptive"){
 
 dir_name = paste("./results/",model_name, "/GillespieSSA_",algo_name,"/", sep="")
 dir.create(dir_name, recursive=TRUE)
-for (i in 1:nrep) {
+if (write_results_flag == "True"){
+  for (i in 1:nrep) {
   fname = paste(dir_name, i, ".csv", sep="")
   # fname = paste("..\\results\\",model_name, "\\GillespieSSA_otl\\", i, ".csv", sep="")
   out <- ssa(res$x0,res$a,res$nu,res$parms,res$tf,method=algo,res$simName,verbose=FALSE,consoleInterval=1)
   write.table(out$data, quote=FALSE, row.names=FALSE, col.names=FALSE, sep=",", file=fname)
-}
-
-row.names=FALSE, col.names=FALSE, sep=",", file=fname)
+  }
+} else {
+  for (i in 1:nrep) {
+  ssa(res$x0,res$a,res$nu,res$parms,res$tf,method=algo,res$simName,verbose=FALSE,consoleInterval=1)
+  }
+  print("Not saving results");
 }
 
