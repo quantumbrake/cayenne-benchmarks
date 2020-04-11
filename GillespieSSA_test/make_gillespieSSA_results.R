@@ -90,10 +90,10 @@ get_model <- function(model_str="00001"){
     # In the model description, they just say k1 = 0.001 without specifying
     # deterministic or stochastic. They end up using k1_stoc = 0.001. To have
     # k1_stoc = 0.001, we should set k1_det = 0.001/2.
-    parms <- c(k1=0.001/2, k2=0.01)
+    parms <- c(k1=0.001, k2=0.01)
     x0 <- c(S1=100, S12=0)
     nu <- matrix(c(-2, +2, +1, -1), nrow=2, byrow=TRUE)
-    a <- c("k1*S1*S1", "k2*S12")
+    a <- c("k1*S1*(S1-1)/2", "k2*S12")
     tf <- 51
     simName <- "Model 00030, Dimerization"
   }
@@ -103,10 +103,10 @@ get_model <- function(model_str="00001"){
     # In the model description, they just say k1 = 0.001 without specifying
     # deterministic or stochastic. They end up using k1_stoc = 0.001. To have
     # k1_stoc = 0.001, we should set k1_det = 0.001/2.
-    parms <- c(k1=0.002/2, k2=0.004)
+    parms <- c(k1=0.0002, k2=0.004)
     x0 <- c(S1=1000, S12=0)
     nu <- matrix(c(-2, +2, +1, -1), nrow=2, byrow=TRUE)
-    a <- c("k1*S1*S1", "k2*S12")
+    a <- c("k1*S1*(S1-1)/2", "k2*S12")
     tf <- 51
     simName <- "Model 00031, Dimerization"
   }
