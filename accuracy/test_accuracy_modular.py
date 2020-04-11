@@ -38,11 +38,19 @@ def test_accuracy(id_: str, library: str, algo: str, nrep: int):
     two_species_models = ["00030", "00031"]
 
     plt_name = f"plots/{library}_{algo}_{id_}_{nrep}.pdf"
+    if library == "BioSimulatorIntp":
+        saved_results_interpolated = True
+    else:
+        saved_results_interpolated = False
     if id_ not in two_species_models:
         time_list, mu_list, std_list = read_results_analytical(id_)
         res = read_results_simulation(id_, library=library, algo=algo, n_reps=nrep)
         Z, Y, mu_obs_list, std_obs_list = calculate_zy(
-            res, time_list, mu_list, std_list
+            res,
+            time_list,
+            mu_list,
+            std_list,
+            saved_results_interpolated=saved_results_interpolated,
         )
         make_plot(
             time_list, mu_list, std_list, mu_obs_list, std_obs_list, Z, Y, plt_name
@@ -52,7 +60,11 @@ def test_accuracy(id_: str, library: str, algo: str, nrep: int):
         time_list, mu_list, std_list = read_results_analytical_2sp(id_)
         res = read_results_simulation_2sp(id_, library=library, algo=algo, n_reps=nrep)
         Z, Y, mu_obs_list, std_obs_list = calculate_zy_2sp(
-            res, time_list, mu_list, std_list
+            res,
+            time_list,
+            mu_list,
+            std_list,
+            saved_results_interpolated=saved_results_interpolated,
         )
         make_plot_2sp(
             time_list, mu_list, std_list, mu_obs_list, std_obs_list, Z, Y, plt_name

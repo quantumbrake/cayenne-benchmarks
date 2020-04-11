@@ -92,8 +92,35 @@ def read_results_analytical_2sp(test_id: str):
     return time, mu, std
 
 
+def get_results_from_index(res: Results, ind: int):
+    """Get simulation states at given index.
+
+    Parameters
+    ----------
+    res
+        A pyssa.Results object.
+    ind
+        The index to return simulation states at. 0 will return the first
+        time point.
+    """
+    states = []
+    for i in range(len(res)):
+        # for each repetition
+        x_rep, _, _ = res[i]
+        if ind >= x_rep.shape[0]:
+            state = x_rep[-1]
+        else:
+            state = x_rep[ind]
+        states.append(state)
+    return states
+
+
 def calculate_zy(
-    res: Results, time_arr: np.array, mu_analytical: np.array, std_analytical: np.array
+    res: Results,
+    time_arr: np.array,
+    mu_analytical: np.array,
+    std_analytical: np.array,
+    saved_results_interpolated: bool,
 ):
     """Calculate Z and Y.
 
@@ -111,6 +138,9 @@ def calculate_zy(
     std_analytical
         List of analytical standard deviations at the time points in
         ``time_arr``.
+    saved_results_interpolated
+        Flag denoting whether saved simulation results are interpolated or not.
+        ``True`` if interpolated.
 
     Returns
     -------
@@ -129,9 +159,11 @@ def calculate_zy(
     mu_obs_arr = np.zeros(len(time_arr))
     std_obs_arr = np.zeros(len(time_arr))
     mu_obs_arr[0] = mu_analytical[0]
-
     for ind1, t in enumerate(time_arr[1:]):
-        results = res.get_state(t)
+        if saved_results_interpolated == False:
+            results = res.get_state(t)
+        else:
+            results = get_results_from_index(res, ind1 + 1)
         mu_obs = np.mean(results)
         std_obs = np.std(results)
         z_list.append(
@@ -150,7 +182,11 @@ def calculate_zy(
 
 
 def calculate_zy_2sp(
-    res: Results, time_arr: np.array, mu_analytical: np.array, std_analytical: np.array
+    res: Results,
+    time_arr: np.array,
+    mu_analytical: np.array,
+    std_analytical: np.array,
+    saved_results_interpolated: bool,
 ):
     """Calculate Z and Y for simulations with 2 species.
 
@@ -168,6 +204,9 @@ def calculate_zy_2sp(
     std_analytical
         List of analytical standard deviations at the time points in
         ``time_arr``.
+    saved_results_interpolated
+        Flag denoting whether saved simulation results are interpolated or not.
+        ``True`` if interpolated.
 
     Returns
     -------
@@ -186,16 +225,20 @@ def calculate_zy_2sp(
     mu_obs_list = [mu_analytical[0, :]]
     std_obs_list = [[0.0, 0.0]]
     for ind1, t in enumerate(time_arr[1:]):
-        results = res.get_state(t)
+        if not saved_results_interpolated:
+            results = res.get_state(t)
+        else:
+            results = get_results_from_index(res, ind1 + 1)
         mu_obs = np.mean(results, axis=0)
         std_obs = np.std(results, axis=0)
         z_list.append(
             np.sqrt(n_rep)
-            * (mu_obs - mu_analytical[ind1 + 1])
-            / std_analytical[ind1 + 1]
+            * (mu_obs - mu_analytical[ind1 + 1, :])
+            / std_analytical[ind1 + 1, :]
         )
         y_list.append(
-            np.sqrt(n_rep / 2) * ((std_obs ** 2) / (std_analytical[ind1 + 1] ** 2) - 1)
+            np.sqrt(n_rep / 2)
+            * ((std_obs ** 2) / (std_analytical[ind1 + 1, :] ** 2) - 1)
         )
         mu_obs_list.append(mu_obs)
         std_obs_list.append(std_obs)
@@ -219,12 +262,13 @@ def read_results_simulation(
     library: str = "GillespieSSA",
     algo: str = "direct",
     n_reps: str = None,
+    res_folder: str = None,
 ):
     """Read simulation results.
 
     Given a model, library and algorithm, read the results. If `n_reps` is also
     provided, read only the first `n_rep` results. If not, read as many as
-    there are in the folder for that model/library/algorithm combination..2f
+    there are in the folder for that model/library/algorithm combination.
 
     Parameters
     ----------
@@ -237,6 +281,9 @@ def read_results_simulation(
     n_reps
         Number of reps to read the simulation results for. Default is `None`
         and all results are read.
+    res_folder
+        If None, read from the results folder. Else read from the specified
+        folder. This is used in tests.
 
     Returns
     -------
@@ -247,7 +294,8 @@ def read_results_simulation(
     t_list = []
     status_list = []
     sim_seeds = []
-    res_folder = f"results/{model}/{library}_{algo}/"
+    if res_folder is None:
+        res_folder = f"results/{model}/{library}_{algo}/"
     if n_reps is None:
         n_reps = get_highest_rep_in_path(res_folder)
 
@@ -262,13 +310,44 @@ def read_results_simulation(
 
 
 def read_results_simulation_2sp(
-    model="00030", library="GillespieSSA", algo="direct", n_reps=None
+    model="00030",
+    library="GillespieSSA",
+    algo="direct",
+    n_reps=None,
+    res_folder: str = None,
 ):
+    """Read simulation results for 2sp.
+
+    Given a model, library and algorithm, read the results. If `n_reps` is also
+    provided, read only the first `n_rep` results. If not, read as many as
+    there are in the folder for that model/library/algorithm combination.
+
+    Parameters
+    ----------
+    model
+        Model id.
+    library
+        Name of the library.
+    algo
+        Name of the algorithm.
+    n_reps
+        Number of reps to read the simulation results for. Default is `None`
+        and all results are read.
+    res_folder
+        If None, read from the results folder. Else read from the specified
+        folder. This is used in tests.
+
+    Returns
+    -------
+    res: Results
+        A `pyssa.Results` object containing the results.
+    """
     x_list = []
     t_list = []
     status_list = []
     sim_seeds = []
-    res_folder = f"results/{model}/{library}_{algo}/"
+    if res_folder is None:
+        res_folder = f"results/{model}/{library}_{algo}/"
     if n_reps is None:
         n_reps = get_highest_rep_in_path(res_folder)
 
