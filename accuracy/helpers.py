@@ -282,7 +282,7 @@ def read_results_simulation_2sp(
     return res
 
 
-def make_overlay_plot(
+def make_zy_plot(
     time_pts: np.array,
     value_obs: np.array,
     value_analytical: np.array,
@@ -319,6 +319,33 @@ def make_overlay_plot(
         ax.plot(time_pts[i + 1], value_analytical[i + 1], ".", color=marker)
 
 
+def make_ratio_plot(
+    time_pts: np.array,
+    value_obs: np.array,
+    value_analytical: np.array,
+    stat_thresh: list,
+    ax,
+):
+    """Make a plot of ratios of observed means to analytical means
+
+    """
+    stat_lb, stat_ub = stat_thresh[0], stat_thresh[1]
+    ax.axhline(y=1.0, alpha=0.8)
+    ax.axhline(y=stat_lb, linestyle="--")
+    ax.axhline(y=stat_ub, linestyle="--")
+    for i in range(time_pts.shape[0]):
+        obs, analytical = value_obs[i], value_analytical[i]
+        try:
+            ratio = obs / analytical
+        except ZeroDivisionError:
+            continue
+        if stat_lb <= ratio <= stat_ub:
+            marker = "green"
+        else:
+            marker = "red"
+        ax.plot(time_pts[i], ratio, ".", color=marker)
+
+
 def make_plot(
     time_arr: np.array,
     mu_analytical: np.array,
@@ -351,14 +378,27 @@ def make_plot(
     Y
         Numpy array of calculated Y values.
     """
-    plt.subplot(121)
+    plt.subplot(221)
+    name = plt_name.split("/")[1].split(".")[0]
+    plt.title(name)
     ax = plt.gca()
-    make_overlay_plot(time_arr, mu_obs, mu_analytical, Z, 3, ax)
+    make_zy_plot(time_arr, mu_obs, mu_analytical, Z, 3, ax)
     ax.set_ylabel("Observed mean")
-    plt.subplot(122)
+    plt.subplot(222)
     ax = plt.gca()
-    make_overlay_plot(time_arr, std_obs, std_analytical, Y, 5, ax)
+    make_zy_plot(time_arr, std_obs, std_analytical, Y, 5, ax)
     ax.set_ylabel("Observed sd")
+    plt.subplot(223)
+    ax = plt.gca()
+    make_ratio_plot(time_arr, mu_obs, mu_analytical, [0.98, 1.02], ax)
+    ax.set_ylabel(r"$\mu$ ratio")
+    ax.set_xlabel("time")
+    plt.subplot(224)
+    ax = plt.gca()
+    make_ratio_plot(time_arr, std_obs, std_analytical, [0.98, 1.02], ax)
+    ax.set_ylabel(r"$\sigma$ ratio")
+    ax.set_xlabel("time")
+    plt.tight_layout()
     plt.savefig(plt_name)
 
 
@@ -394,20 +434,42 @@ def make_plot_2sp(
     Y
         Numpy array of calculated Y values.
     """
-    plt.subplot(221)
+    plt.figure(figsize=(8, 16))
+    plt.subplot(421)
+    name = plt_name.split("/")[1].split(".")[0]
+    plt.title(name)
     ax = plt.gca()
-    make_overlay_plot(time_arr, mu_obs[:, 0], mu_analytical[:, 0], Z[:, 0], 3, ax)
+    make_zy_plot(time_arr, mu_obs[:, 0], mu_analytical[:, 0], Z[:, 0], 3, ax)
     ax.set_ylabel("Observed mean - S1")
-    plt.subplot(222)
+    plt.subplot(422)
     ax = plt.gca()
-    make_overlay_plot(time_arr, std_obs[:, 0], std_analytical[:, 0], Y[:, 0], 5, ax)
+    make_zy_plot(time_arr, std_obs[:, 0], std_analytical[:, 0], Y[:, 0], 5, ax)
     ax.set_ylabel("Observed sd - S1")
-    plt.subplot(223)
+    plt.subplot(423)
     ax = plt.gca()
-    make_overlay_plot(time_arr, mu_obs[:, 1], mu_analytical[:, 1], Z[:, 1], 3, ax)
+    make_ratio_plot(time_arr, mu_obs[:, 0], mu_analytical[:, 0], [0.98, 1.02], ax)
+    ax.set_ylabel(r"$\mu$ ratio - S1")
+    plt.subplot(424)
+    ax = plt.gca()
+    make_ratio_plot(time_arr, std_obs[:, 0], std_analytical[:, 0], [0.98, 1.02], ax)
+    ax.set_ylabel(r"$\sigma$ ratio - S1")
+    plt.subplot(425)
+    ax = plt.gca()
+    make_zy_plot(time_arr, mu_obs[:, 1], mu_analytical[:, 1], Z[:, 1], 3, ax)
     ax.set_ylabel("Observed mean - S2")
-    plt.subplot(224)
+    plt.subplot(426)
     ax = plt.gca()
-    make_overlay_plot(time_arr, std_obs[:, 1], std_analytical[:, 1], Y[:, 1], 5, ax)
+    make_zy_plot(time_arr, std_obs[:, 1], std_analytical[:, 1], Y[:, 1], 5, ax)
     ax.set_ylabel("Observed sd - S2")
+    plt.subplot(427)
+    ax = plt.gca()
+    make_ratio_plot(time_arr, mu_obs[:, 1], mu_analytical[:, 1], [0.98, 1.02], ax)
+    ax.set_ylabel(r"$\mu$ ratio - S2")
+    ax.set_xlabel("time")
+    plt.subplot(428)
+    ax = plt.gca()
+    make_ratio_plot(time_arr, std_obs[:, 1], std_analytical[:, 1], [0.98, 1.02], ax)
+    ax.set_ylabel(r"$\sigma$ ratio - S2")
+    ax.set_xlabel("time")
+    plt.tight_layout()
     plt.savefig(plt_name)
