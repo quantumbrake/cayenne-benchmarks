@@ -4,11 +4,12 @@ from functools import partial
 import multiprocessing as mp
 import pathlib
 from subprocess import Popen, PIPE, TimeoutExpired
+import sys
 from warnings import warn
 
 import pandas as pd
 
-from accuracy.test_accuracy_modular import test_accuracy
+from accuracy.accuracy import test_accuracy
 
 
 def wrapper(x, func):
@@ -17,7 +18,9 @@ def wrapper(x, func):
 
 def get_cmd(lib, model, algo, nrep):
     if lib == "BioSimulator":
-        cmd = f"julia biosimjl_test/make_biosim_results.jl {model} {algo} {nrep}"
+        cmd = f"julia biosimjl_test/make_biosim_results.jl {model} {algo} {nrep} False"
+    elif lib == "BioSimulatorIntp":
+        cmd = f"julia biosimjl_test/make_biosim_results.jl {model} {algo} {nrep} True"
     elif lib == "Tellurium":
         cmd = f"python tellurium_test/make_tel_results.py {model} {nrep}"
     elif lib == "GillespieSSA":
@@ -62,7 +65,7 @@ def run_simulation(lib, model, algo, nrep, timeout=10_000):
         if proc.returncode != 0:
             print(f"{cmd} failed")
     else:
-        print("Results already exist")
+        print(f"Results already exist for {lib}, {algo}, {model}")
     try:
         failed_list = test_accuracy(model, lib, algo, nrep)
     except OSError:
@@ -80,24 +83,51 @@ def run_simulation(lib, model, algo, nrep, timeout=10_000):
     return data
 
 
-def main(lib, models, algos, nrep, processes=4):
+def update_file(file_name, data_list):
+    df = pd.read_csv(file_name, dtype={"model": str})
+    condn = lambda x, y, z: (df["model"] == x) & (df["lib"] == y) & (df["algo"] == z)
+    for data_item in data_list:
+        model = data_item["model"]
+        lib = data_item["lib"]
+        algo = data_item["algo"]
+        row = df.loc[condn(model, lib, algo)]
+        if row.shape[0] == 0:
+            df = df.append(data_item, ignore_index=True)
+        elif row.shape[0] == 1:
+            df.loc[row.index, "test0"] = data_item["test0"]
+            df.loc[row.index, "test1"] = data_item["test1"]
+            df.loc[row.index, "test2"] = data_item["test2"]
+            df.loc[row.index, "test3"] = data_item["test3"]
+        else:
+            raise RuntimeError("Data file contains duplicate rows")
+    df.to_csv(file_name, index=False)
+    return df
+
+
+def main(lib, models, algos, nrep, n_procs, save_results=False):
     simulation_args = []
     for model in models:
         for algo in algos:
             simulation_args.append((lib, model, algo, nrep))
     func = partial(wrapper, func=run_simulation)
-    with mp.Pool(processes=processes) as pool:
+    with mp.Pool(processes=n_procs) as pool:
         data_map = pool.map(func, simulation_args)
     cols = ["model", "lib", "algo", "nrep", "test0", "test1", "test2", "test3"]
     data_list = list(data_map)
+    file_name = f"results/{lib}_results.csv"
+    if save_results and nrep == 10_000:
+        print("Updating the results file")
+        df = update_file(file_name, data_list)
+    else:
+        print("Not updating the results file")
     df = pd.DataFrame(data_list)
     print(df)
-    file_name = f"{lib}_results.csv"
-    df.to_csv(file_name, index=False)
 
 
 if __name__ == "__main__":
-    LIB = "pyssa"
+    N_PROCS = int(sys.argv[1])
+    SAVE_RESULTS = True if sys.argv[2] == "True" else False
+    LIB = "BioSimulator"
     MODELS = ["00001"]
     # MODELS = [
     #     "00001",
@@ -116,6 +146,6 @@ if __name__ == "__main__":
     #     "00039",
     # ]
     ALGOS = ["direct"]
-    # ALGOS = ["tau_leaping", "tau_adaptive"]
+    # ALGOS = ["direct", "tau_leaping", "tau_adaptive"]
     NREP = 10_000
-    main(LIB, MODELS, ALGOS, NREP)
+    main(LIB, MODELS, ALGOS, NREP, N_PROCS, SAVE_RESULTS)
