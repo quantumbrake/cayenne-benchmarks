@@ -69,7 +69,7 @@ def run_simulation(lib, model, algo, nrep, timeout=10_000):
     try:
         failed_list = test_accuracy(model, lib, algo, nrep)
     except OSError:
-        failed_list = [-1, -1, -1, -1]
+        failed_list = [-1, -1, -1, -1, -1, -1, -1, -1]
     data = {
         "model": model,
         "lib": lib,
@@ -79,6 +79,10 @@ def run_simulation(lib, model, algo, nrep, timeout=10_000):
         "test1": failed_list[1],
         "test2": failed_list[2],
         "test3": failed_list[3],
+        "rtest0": failed_list[4],
+        "rtest1": failed_list[5],
+        "rtest2": failed_list[6],
+        "rtest3": failed_list[7],
     }
     return data
 
@@ -98,6 +102,10 @@ def update_file(file_name, data_list):
             df.loc[row.index, "test1"] = data_item["test1"]
             df.loc[row.index, "test2"] = data_item["test2"]
             df.loc[row.index, "test3"] = data_item["test3"]
+            df.loc[row.index, "rtest0"] = data_item["rtest0"]
+            df.loc[row.index, "rtest1"] = data_item["rtest1"]
+            df.loc[row.index, "rtest2"] = data_item["rtest2"]
+            df.loc[row.index, "rtest3"] = data_item["rtest3"]
         else:
             raise RuntimeError("Data file contains duplicate rows")
     df.to_csv(file_name, index=False)
@@ -112,7 +120,6 @@ def main(lib, models, algos, nrep, n_procs, save_results=False):
     func = partial(wrapper, func=run_simulation)
     with mp.Pool(processes=n_procs) as pool:
         data_map = pool.map(func, simulation_args)
-    cols = ["model", "lib", "algo", "nrep", "test0", "test1", "test2", "test3"]
     data_list = list(data_map)
     file_name = f"results/{lib}_results.csv"
     if save_results and nrep == 10_000:
