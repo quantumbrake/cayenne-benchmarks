@@ -177,7 +177,7 @@ if (write_results_flag == "True"){
   }
 } else {
   for (i in 1:nrep) {
-  ssa(res$x0,res$a,res$nu,res$parms,res$tf,method=algo,res$simName,verbose=FALSE,consoleInterval=1)
+  out <- ssa(res$x0,res$a,res$nu,res$parms,res$tf,method=algo,res$simName,verbose=FALSE,consoleInterval=1)
   }
   print("Not saving results");
 }
