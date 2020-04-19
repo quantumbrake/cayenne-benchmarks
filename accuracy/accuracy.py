@@ -9,6 +9,7 @@ from .helpers import (
 from .helpers import (
     read_results_analytical_2sp,
     calculate_zy_2sp,
+    calculate_ms_ratios,
     read_results_simulation_2sp,
 )
 import numpy as np
@@ -69,12 +70,19 @@ def test_accuracy(id_: str, library: str, algo: str, nrep: int):
         make_plot_2sp(
             time_list, mu_list, std_list, mu_obs_list, std_obs_list, Z, Y, plt_name
         )
+    mu_ratio, std_ratio = calculate_ms_ratios(
+        mu_obs_list, mu_list, std_obs_list, std_list
+    )
 
     # TODO: Does this work for two species?
-    failed_list = [None, None, None, None]
+    failed_list = [None] * 8
     failed_list[0] = np.sum(Z < -3)
     failed_list[1] = np.sum(Z > 3)
     failed_list[2] = np.sum(Y < -5)
     failed_list[3] = np.sum(Y > 5)
+    failed_list[4] = np.sum(mu_ratio < 0.98)
+    failed_list[5] = np.sum(mu_ratio > 1.02)
+    failed_list[6] = np.sum(std_ratio < 0.98)
+    failed_list[7] = np.sum(std_ratio > 1.02)
 
     return failed_list

@@ -1,4 +1,5 @@
 import pathlib
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -179,6 +180,33 @@ def calculate_zy(
     z_arr = np.array(z_list)
     y_arr = np.array(y_list)
     return z_arr, y_arr, mu_obs_arr, std_obs_arr
+
+
+def calculate_ms_ratios(
+    mu_obs: np.array,
+    mu_analytical: np.array,
+    std_obs: np.array,
+    std_analytical: np.array,
+) -> Tuple[np.array, np.array]:
+    """
+        Calculate mu and sigma ratios
+
+        Parameters
+        ----------
+        mu_obs : np.array
+        mu_analytical : np.array
+        std_obs : np.array
+        std_analytical : np.array
+
+        Returns
+        -------
+        Tuple[np.array, np.array]
+    """
+    mu_ratio = mu_obs / mu_analytical
+    mu_ratio[np.where(mu_ratio == np.inf)] = 1.0
+    std_ratio = std_obs / std_analytical
+    std_ratio[np.where(std_ratio == np.inf)] = 1.0
+    return mu_ratio, std_ratio
 
 
 def calculate_zy_2sp(
@@ -398,6 +426,7 @@ def make_zy_plot(
         ax.plot(time_pts[i + 1], value_analytical[i + 1], ".", color=marker)
 
 
+# TODO: Use calculate_ms_ratios function instead
 def make_ratio_plot(
     time_pts: np.array,
     value_obs: np.array,
