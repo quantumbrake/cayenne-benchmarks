@@ -8,6 +8,7 @@ from accuracy.helpers import (
     read_results_simulation_2sp,
     calculate_zy,
     calculate_zy_2sp,
+    calculate_ms_ratios
 )
 
 
@@ -145,3 +146,23 @@ def test_calculate_zy_2sp():
     assert np.isclose(std_obs, std_analytical).all()
     assert np.isclose(z, np.array([[0, 0, 0, 0], [0, 0, 0, 0]]).transpose()).all()
     assert np.isclose(y, np.array([[0, 0, 0, 0], [0, 0, 0, 0]]).transpose()).all()
+
+
+def test_ms_ratios():
+    # test 1d and 2d in the same call
+    mu_obs = np.array([1, 2, 3])
+    mu_analytical = np.array([2, 8, 15])
+    # make std floats since we expect them to be
+    std_obs = np.array([[2.0, 4, 6, 8], [5, 12, 14, 16]])
+    # include a 0. ratio will be inf, but that should be caught and set to 1.
+    std_analytical = np.array([[1, 2, 3, 4], [0, 6, 7, 8]])
+    mu_ratio, std_ratio = calculate_ms_ratios(
+        mu_obs=mu_obs,
+        mu_analytical=mu_analytical,
+        std_obs=std_obs,
+        std_analytical=std_analytical,
+    )
+    expected_mu_ratio = np.array([1 / 2.0, 1 / 4.0, 1 / 5.0])
+    expected_std_ratio = np.array([[2, 2, 2, 2], [1, 2, 2, 2]])
+    assert np.isclose(mu_ratio, expected_mu_ratio).all()
+    assert np.isclose(std_ratio, expected_std_ratio).all()
