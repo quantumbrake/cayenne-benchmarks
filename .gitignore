@@ -113,7 +113,6 @@ pyflame
 # data directories
 results/
 plots/
-benchmarks/
 
 # plots
 .pdf
