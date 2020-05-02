@@ -62,6 +62,15 @@ To compare the speed of the different algorithms, we used a subset of models (5 
 
 # Results
 
+<img src="/assets/acc_speed_comparison_example.png" alt="foo" title="title" />
+
+above is html
+
+![Accuracy vs. Speed](assets/acc_speed_comparison_example.png?raw=true)
+
+![image info](./assets/acc_speed_comparison_example.png)
+
+
 ## Example results from comparisons
 
 ### Accuracy vs. speed
