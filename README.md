@@ -62,18 +62,24 @@ To compare the speed of the different algorithms, we used a subset of models (5 
 
 # Results
 
-<img src="/assets/acc_speed_comparison_example.png" alt="foo" title="title" />
-
-above is html
-
-![Accuracy vs. Speed](assets/acc_speed_comparison_example.png?raw=true)
-
-![image info](./assets/acc_speed_comparison_example.png)
-
+Here we present some example results from our analysis, followed by key take-homes. The details are presented in the notebook available in the notebooks folder above.
 
 ## Example results from comparisons
 
+![image info](./assets/acc_speed_comparison_example.png)
+
 ### Accuracy vs. speed
+
+The plot above shows accuracy on the X axis and speed on the Y axis, for one of the 5 models used in the speed comparison. Good algorithms belong on the top right corner of the plot.
+
+- It appears that the direct algorithms (circles) are usually more accurate than the approximate algorithms (crosses and squares).
+- The speed of the direct algorithms is not very different from the approximate algorithms. Interestingly, in some cases the direct algorithm is faster than its approximate counterparts.
+- Library-wise, we see the following trends:
+  - `BioSimulator.jl`'s approximate algorithms are inaccurate.
+  - `GillespieSSA` is accurate but slow.
+  - The naive `tau_leaping` implemented in `pyssa` is both fast and accurate.
+
+Yet this comparison is limited because it only explores a single model. A comparison of accuracy for different models, followed by speed for different models are presented below.
 
 ### Accuracy
 
