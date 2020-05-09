@@ -83,6 +83,12 @@ Yet this comparison is limited because it only explores a single model. A compar
 
 ### Accuracy
 
+- The direct algorithm was generally accurate across the packages tested. The exceptions are
+  - `BioSimulator.jl` appears to interpolate values poorly. When BioSimulator's raw results were interpolated with `pyssa`'s backend, the accuracy was restored.
+  - `Tellurium`'s appears to be inaccurate when reactions are second order (usually occurs when there are two reactants).
+- The approximate algorithms on average performed poorly compared to their direct counterparts across different models. Some systemic bugs/defects we identified are:
+  - `BioSimulator.jl` and `GillespieSSA` fail to simulate the system if the number of molecules is initially zero. They don't account for zero order reactions which can result in valid simulations, such as migration into the system.
+
 ### Speed
 
 ## Main take homes
@@ -90,3 +96,4 @@ Yet this comparison is limited because it only explores a single model. A compar
 # What algorithm should you use?
 
 # Code in this repository
+
