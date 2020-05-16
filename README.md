@@ -126,6 +126,29 @@ Parameter | Description | Example value | Type of value
 `N_PROC` | Number of CPU processors to use for the accuracy test| `4` | `int`
 `SAVE_RESULTS` | Whether or not to save the simulation results | `True` or `False` | `str`
 `LIB` | The library to run accuracy tests on | `"BioSimulator"`, `"BioSimulatorIntp"` (interpolate within `BioSimulator.jl`), `"Tellurium"`, `"GillespieSSA"` or `"pyssa"` | `str`
-`MODELS` | The models to run accuracy tests on | `["00001"]` | `List[str]`
+`MODELS` | The id of the models to run accuracy tests on (corresponding to [SBML test suite][sbmltestsuite]) | `["00001"]` | `List[str]`
 `ALGOS` | The algorithms to run accuracy tests on | `["direct", "tau_leaping"]` | `List[str]`
 `N_REP` | The number of times to repeat the simulations of a given model | `10000` | `int`
+
+## Speed tests
+
+The accuracy tests can be run from the base directory of this repository (which contains `run_benchmarks.py`). Just run:
+
+```bash
+python run_benchmarks.py <LIB> <MODEL> <ALGO> <NREP>
+```
+
+This will run the speed benchmarks for the specified library, model and algorithm combination for the specified number of repetitions.
+
+Parameter | Description | Example values
+--- | --- | ---
+LIB | The library to run speed benchmarks on | BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium, pyssa |
+MODEL | The model id (corresponding to [SBML test suite][sbmltestsuite]) | 00001, 00003
+ALGO | The algorithm to run | One of `direct`, `tau_leaping` and `tau_adaptive`. The exact algorithm depends on the library (see [above](#libraries-compared)).
+NREP | The number of repetitions of the model to calculate a single estimate of run-time. | 10000
+
+For example, we can invoke a speed benchmark as follows:
+
+```bash
+python run_benchmarks.py pyssa 00001 direct 10000
+```
