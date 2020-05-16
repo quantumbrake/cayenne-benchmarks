@@ -15,14 +15,14 @@ We compare the 4 libraries across Python, R and Julia. These are listed below al
 
 Library | Language | Algorithm name in library | Algorithm name in our comparison | Standard name of algorithm
 ---| --- | --- | --- | ----
-pyssa | Python | `direct` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
+pyssa (v0.9.1) | Python (v3.6.9) | `direct` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
 | | | `tau_leaping` | `tau_leaping` | Standard tau leaping ([Gillespie2001][tau_leaping] also see [Wikipedia][tau_leaping_wiki])
 | | | `tau_adaptive` | `tau_adaptive` | Tau leaping with efficient step size selection ([Cao. et al. 2006][tau_adaptive])
-Tellurium | Python | `gillespie` | `direct` | Unknown (see [here](https://tellurium.readthedocs.io/en/latest/_notebooks/core/tellurium_stochastic.html?highlight=gillespie#stochastic-simulation)), likely similar to Gillespie's Direct Method
-GillespieSSA | R | `ssa.d` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
+Tellurium (v2.1.5) | Python (v3.6.9) | `gillespie` | `direct` | Unknown (see [here](https://tellurium.readthedocs.io/en/latest/_notebooks/core/tellurium_stochastic.html?highlight=gillespie#stochastic-simulation)), likely similar to Gillespie's Direct Method
+GillespieSSA (0.6.1) | R (v3.6.1) | `ssa.d` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
 | | | `ssa.etl` | `tau_leaping` |  Standard tau leaping ([Gillespie2001][tau_leaping] also see [Wikipedia][tau_leaping_wiki])
 | | | `ssa.otl` | `tau_adaptive` | Tau leaping with efficient step size selection ([Cao. et al. 2006][tau_adaptive])
-BioSimulator.jl | Julia | `Direct` | `direct` |  Gillespie's Direct method ([Gillespie1973][direct])
+BioSimulator.jl (v0.9.3)| Julia (v1.4.0) | `Direct` | `direct` |  Gillespie's Direct method ([Gillespie1973][direct])
 | | | `TauLeapingDGLP2003` | `tau_leaping` | Improved leap-size selection for accelerated stochastic simulation ([Gillespie and Petzold 2003][dglp2003])
 | | | `HybridSAL` | `tau_adaptive` | Step anticipation tau-leaping (SAL) algorithm that defaults to `Direct` depending on cumulative density ([Sehl et. al 2009][hybridsal])
 
