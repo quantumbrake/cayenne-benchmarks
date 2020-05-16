@@ -96,54 +96,12 @@ Yet this comparison is limited because it only explores a single model. A compar
 
 # What algorithm should you use?
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-style:solid;border-width:0px;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;
-  padding:10px 5px;word-break:normal;}
-.tg th{border-style:solid;border-width:0px;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-0lax{text-align:left;vertical-align:top}
-.tg .tg-green{background-color:#c6e0b4;border-color:#000000;text-align:left;vertical-align:top}
-.tg .tg-orange{background-color:#ffe685;border-color:#000000;text-align:left;vertical-align:top}
-.tg .tg-73oq{border-color:#000000;text-align:left;vertical-align:top}
-.tg .tg-red{background-color:#f4b084;border-color:#000000;text-align:left;vertical-align:top}
-</style>
-<table class="tg">
-<thead>
-  <tr>
-    <th class="tg-0lax"></th>
-    <th class="tg-0lax">direct</th>
-    <th class="tg-0lax">tau_leaping</th>
-    <th class="tg-0lax">tau_adaptive</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax">pyssa</td>
-    <td class="tg-green">Most   accurate yet</td>
-    <td class="tg-green">Very fast but may need manual tuning</td>
-    <td class="tg-orange">Less   accurate than GillespieSSA's version</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Tellurium</td>
-    <td class="tg-orange">Inaccurate   for 2nd order</td>
-    <td class="tg-73oq">N/A</td>
-    <td class="tg-73oq">N/A</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">GillespieSSA</td>
-    <td class="tg-orange">Very   slow</td>
-    <td class="tg-red">Inaccurate   for initial zero counts</td>
-    <td class="tg-red">Inaccurate   for initial zero counts</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">BioSimulator.jl</td>
-    <td class="tg-orange">Inaccurate   interpolation</td>
-    <td class="tg-red">Inaccurate   for initial zero counts</td>
-    <td class="tg-red">Inaccurate   for initial zero counts</td>
-  </tr>
-</tbody>
-</table>
+| | direct|	tau_leaping |	tau_adaptive |
+--- | --- |--- | --- |
+pyssa	| :heavy_check_mark: Most accurate yet	| :heavy_check_mark: Very fast but may need manual tuning|	Less accurate than GillespieSSA's version|
+Tellurium | :exclamation: Inaccurate for 2nd order | N/A | N/A |
+GillespieSSA | Very slow |:exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
+BioSimulator.jl |	:exclamation: Inaccurate interpolation | :exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
 
 - From this table above, a user is best off starting with `pyssa`'s `direct` algorithm. It is accurate for several different model configurations.
 - If `direct` is too slow, `pyssa`'s `tau_leaping` may be considered. This may require some hand-tuning of the `tau` parameter depending on the system. But we found that fixing the value to `0.1` sufficed for most of the accuracy tests.
