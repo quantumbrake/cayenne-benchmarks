@@ -5,11 +5,11 @@ The goal of this repository is to compare the different softwares used for stoch
 - Accuracy of simulation
 - Speed of simulation
 
-## Background
+# Background
 Stochastic simulations (see [Wikipedia](https://en.wikipedia.org/wiki/Gillespie_algorithm)) are used to model biological processes or chemical reactions when the corresponding differential equations cannot be applied. This may be the case when the number of species being modeled is very small (such as 10s of molecules/biological species), and the randomness becomes important. A simple example is a starting with a small number of bacteria (say 5) in a dish. They may either all die out, or they may start dividing and growing rapidly. The outcome itself is random, and you would use a Gillespie simulator to model such a process.
 
 
-## Libraries compared
+# Libraries compared
 
 We compare the 4 libraries across Python, R and Julia. These are listed below along with the algorithms in each library.
 
@@ -32,6 +32,21 @@ BioSimulator.jl (v0.9.3)| Julia (v1.4.0) | `Direct` | `direct` |  Gillespie's Di
 [tau_adaptive]: https://doi.org/10.1063%2F1.2159468
 [dglp2003]: https://doi.org/10.1063/1.1613254
 [hybridsal]: https://dx.doi.org/10.1089/cmb.2008.0249
+
+# Quick results : what algorithm to use?
+
+| | direct|	tau_leaping |	tau_adaptive |
+--- | --- |--- | --- |
+pyssa	| :heavy_check_mark: Most accurate yet	| :heavy_check_mark: Very fast but may need manual tuning|	Less accurate than GillespieSSA's version|
+Tellurium | :exclamation: Inaccurate for 2nd order | N/A | N/A |
+GillespieSSA | Very slow |:exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
+BioSimulator.jl |	:exclamation: Inaccurate interpolation | :exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
+
+- From this table above, a user is best off starting with `pyssa`'s `direct` algorithm. It is accurate for several different model configurations.
+- If `direct` is too slow, `pyssa`'s `tau_leaping` may be considered. This may require some hand-tuning of the `tau` parameter depending on the system. But we found that fixing the value to `0.1` sufficed for most of the accuracy tests.
+- Other algorithms and packages may be considered if the system under consideration does not begin with initial amounts set to zero or if there aren't higher order reactions.
+
+# Methods
 
 ## Accuracy comparison
 
@@ -94,18 +109,23 @@ Yet this comparison is limited because it only explores a single model. A compar
 - `pyssa`, `BioSimulator` and `Tellurium` were similar in speed.
 - `GillespieSSA` was at least an order of magnitude slower than the rest of the packages. This was observed across different models and algorithms.
 
-# What algorithm should you use?
+# How to run the code in this repository
 
-| | direct|	tau_leaping |	tau_adaptive |
---- | --- |--- | --- |
-pyssa	| :heavy_check_mark: Most accurate yet	| :heavy_check_mark: Very fast but may need manual tuning|	Less accurate than GillespieSSA's version|
-Tellurium | :exclamation: Inaccurate for 2nd order | N/A | N/A |
-GillespieSSA | Very slow |:exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
-BioSimulator.jl |	:exclamation: Inaccurate interpolation | :exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
+## Accuracy tests
 
-- From this table above, a user is best off starting with `pyssa`'s `direct` algorithm. It is accurate for several different model configurations.
-- If `direct` is too slow, `pyssa`'s `tau_leaping` may be considered. This may require some hand-tuning of the `tau` parameter depending on the system. But we found that fixing the value to `0.1` sufficed for most of the accuracy tests.
-- Other algorithms and packages may be considered if the system under consideration does not begin with initial amounts set to zero or if there aren't higher order reactions.
+The accuracy tests can be run from the base directory of this repository (which contains `run_simulations.py`). Just run:
 
-# Code in this repository
+```bash
+python run_simulations.py 2 False
+```
 
+This will run the accuracy tests on 2 CPU cores and not save the time steps of the simulations. Modifying these, along with choosing which model and libraries to run, are done by editing the `run_simulations.py` file's `__main__` section at the very bottom. The specific parameters which can be modified include:
+
+Parameter | Description | Example value | Type of value
+--- | --- | --- | ---
+`N_PROC` | Number of CPU processors to use for the accuracy test| `4` | `int`
+`SAVE_RESULTS` | Whether or not to save the simulation results | `True` or `False` | `str`
+`LIB` | The library to run accuracy tests on | `"BioSimulator"`, `"BioSimulatorIntp"` (interpolate within `BioSimulator.jl`), `"Tellurium"`, `"GillespieSSA"` or `"pyssa"` | `str`
+`MODELS` | The models to run accuracy tests on | `["00001"]` | `List[str]`
+`ALGOS` | The algorithms to run accuracy tests on | `["direct", "tau_leaping"]` | `List[str]`
+`N_REP` | The number of times to repeat the simulations of a given model | `10000` | `int`
