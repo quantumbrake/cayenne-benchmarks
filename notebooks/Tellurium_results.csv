@@ -1,0 +1,15 @@
+model,lib,algo,nrep,test0,test1,test2,test3,rtest0,rtest1,rtest2,rtest3
+00001,Tellurium,direct,10000,0,0,0,0,0,0,1,0
+00003,Tellurium,direct,10000,0,0,0,1,0,4,1,8
+00004,Tellurium,direct,10000,0,0,0,0,0,9,0,3
+00005,Tellurium,direct,10000,0,41,38,0,0,39,38,2
+00011,Tellurium,direct,10000,0,0,0,0,0,0,0,0
+00020,Tellurium,direct,10000,0,0,0,0,0,0,0,0
+00021,Tellurium,direct,10000,0,0,0,0,0,0,0,0
+00022,Tellurium,direct,10000,0,0,0,0,0,0,0,0
+00023,Tellurium,direct,10000,37,0,37,0,36,0,37,0
+00030,Tellurium,direct,10000,95,0,38,39,84,0,42,40
+00031,Tellurium,direct,10000,97,0,41,39,78,0,45,40
+00037,Tellurium,direct,10000,0,0,0,0,0,0,0,0
+00038,Tellurium,direct,10000,0,0,0,0,0,0,0,0
+00039,Tellurium,direct,10000,0,1,0,0,3,6,3,2
