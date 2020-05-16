@@ -5,6 +5,21 @@ The goal of this repository is to compare the different softwares used for stoch
 - Accuracy of simulation
 - Speed of simulation
 
+# Table of contents
+
+  * [Background](#background)
+   * [Libraries compared](#libraries-compared)
+   * [Quick results : what algorithm to use?](#quick-results--what-algorithm-to-use)
+   * [Methods](#methods)
+      * [Accuracy comparison](#accuracy-comparison)
+      * [Speed comparison](#speed-comparison)
+   * [Results](#results)
+      * [Example results from comparisons](#example-results-from-comparisons)
+   * [How to run the code in this repository](#how-to-run-the-code-in-this-repository)
+      * [Accuracy tests](#accuracy-tests)
+      * [Speed tests](#speed-tests)
+
+
 # Background
 Stochastic simulations (see [Wikipedia](https://en.wikipedia.org/wiki/Gillespie_algorithm)) are used to model biological processes or chemical reactions when the corresponding differential equations cannot be applied. This may be the case when the number of species being modeled is very small (such as 10s of molecules/biological species), and the randomness becomes important. A simple example is a starting with a small number of bacteria (say 5) in a dish. They may either all die out, or they may start dividing and growing rapidly. The outcome itself is random, and you would use a Gillespie simulator to model such a process.
 
@@ -19,7 +34,7 @@ pyssa (v0.9.1) | Python (v3.6.9) | `direct` | `direct` | Gillespie's Direct meth
 | | | `tau_leaping` | `tau_leaping` | Standard tau leaping ([Gillespie2001][tau_leaping] also see [Wikipedia][tau_leaping_wiki])
 | | | `tau_adaptive` | `tau_adaptive` | Tau leaping with efficient step size selection ([Cao. et al. 2006][tau_adaptive])
 Tellurium (v2.1.5) | Python (v3.6.9) | `gillespie` | `direct` | Unknown (see [here](https://tellurium.readthedocs.io/en/latest/_notebooks/core/tellurium_stochastic.html?highlight=gillespie#stochastic-simulation)), likely similar to Gillespie's Direct Method
-GillespieSSA (0.6.1) | R (v3.6.1) | `ssa.d` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
+GillespieSSA (v0.6.1) | R (v3.6.1) | `ssa.d` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
 | | | `ssa.etl` | `tau_leaping` |  Standard tau leaping ([Gillespie2001][tau_leaping] also see [Wikipedia][tau_leaping_wiki])
 | | | `ssa.otl` | `tau_adaptive` | Tau leaping with efficient step size selection ([Cao. et al. 2006][tau_adaptive])
 BioSimulator.jl (v0.9.3)| Julia (v1.4.0) | `Direct` | `direct` |  Gillespie's Direct method ([Gillespie1973][direct])
