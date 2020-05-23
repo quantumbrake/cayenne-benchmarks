@@ -5,8 +5,8 @@ import multiprocessing as mp
 import pathlib
 from subprocess import Popen, PIPE, TimeoutExpired
 import sys
-from warnings import warn
 
+import click
 import pandas as pd
 
 from accuracy.accuracy import test_accuracy
@@ -112,17 +112,47 @@ def update_file(file_name, data_list):
     return df
 
 
-def main(lib, models, algos, nrep, n_procs, save_results=False):
+@click.command()
+@click.option("--lib", "-l", type=str, help="The stochastic simulation library")
+@click.option(
+    "--models",
+    "-m",
+    multiple=True,
+    help="The model IDs to be simulated. Specify multiple with additional -m tags (see example above).",
+)
+@click.option(
+    "--algos",
+    "-a",
+    multiple=True,
+    help="The stochastic algorithms to be used. Specify multiple with additional -a tags (see example above).",
+)
+@click.option(
+    "--nrep", "-n", type=int, help="The number of repetitions in the simulation"
+)
+@click.option(
+    "--nprocs", "-p", type=int, help="The number of processes to be run simultaneously"
+)
+@click.option("--save/--no-save", default=False, help="Save results of the simulation")
+def main(lib: str, models: list, algos: list, nrep: int, nprocs: int, save: bool):
+    """
+        Run stochastic simulations for the library (lib), model IDs (models) and algorithms (algos).
+
+        Examples:
+
+        python run_simulations.py --lib pyssa --models 00001 --models 00003 --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
+
+        python run_simulations.py -l pyssa -m 00001 -m 00003 -a direct -a tau_leaping -n 10000 -p 4 --save
+    """
     simulation_args = []
     for model in models:
         for algo in algos:
             simulation_args.append((lib, model, algo, nrep))
     func = partial(wrapper, func=run_simulation)
-    with mp.Pool(processes=n_procs) as pool:
+    with mp.Pool(processes=nprocs) as pool:
         data_map = pool.map(func, simulation_args)
     data_list = list(data_map)
     file_name = f"results/{lib}_results.csv"
-    if save_results and nrep == 10_000:
+    if save and nrep == 10_000:
         print("Updating the results file")
         df = update_file(file_name, data_list)
     else:
@@ -132,27 +162,4 @@ def main(lib, models, algos, nrep, n_procs, save_results=False):
 
 
 if __name__ == "__main__":
-    N_PROCS = int(sys.argv[1])
-    SAVE_RESULTS = True if sys.argv[2] == "True" else False
-    LIB = "BioSimulator"
-    MODELS = ["00001"]
-    # MODELS = [
-    #     "00001",
-    #     "00003",
-    #     "00004",
-    #     "00005",
-    #     "00011",
-    #     "00020",
-    #     "00021",
-    #     "00022",
-    #     "00023",
-    #     "00030",
-    #     "00031",
-    #     "00037",
-    #     "00038",
-    #     "00039",
-    # ]
-    ALGOS = ["direct"]
-    # ALGOS = ["direct", "tau_leaping", "tau_adaptive"]
-    NREP = 10_000
-    main(LIB, MODELS, ALGOS, NREP, N_PROCS, SAVE_RESULTS)
+    main()
