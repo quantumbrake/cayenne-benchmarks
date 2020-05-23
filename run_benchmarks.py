@@ -41,10 +41,15 @@ def get_benchmark_cmd(lib: str, model: str, algo: str, nrep: int) -> str:
     "--lib",
     "-l",
     type=str,
-    help="The stochastic simulation library containing the algorithm",
+    help="The stochastic simulation library. Supported libraries: pyssa, BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium.",
 )
 @click.option("--model", "-m", type=str, help="The DSMTS ID of the model to benchmark")
-@click.option("--algo", "-a", type=str, help="The stochastic algorithm to benchmark")
+@click.option(
+    "--algo",
+    "-a",
+    type=str,
+    help="The stochastic algorithm to benchmark. Supported algorithms: direct, tau_leaping, tau_adaptive.",
+)
 @click.option(
     "--nrep",
     "-n",

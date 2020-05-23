@@ -113,24 +113,32 @@ def update_file(file_name, data_list):
 
 
 @click.command()
-@click.option("--lib", "-l", type=str, help="The stochastic simulation library")
+@click.option(
+    "--lib",
+    "-l",
+    type=str,
+    help="The stochastic simulation library. Supported libraries: pyssa, BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium.",
+)
 @click.option(
     "--models",
     "-m",
     multiple=True,
-    help="The model IDs to be simulated. Specify multiple with additional -m tags (see example above).",
+    help="The DSMTS ID of the model to simulate. Specify multiple with additional -m tags (see example above).",
 )
 @click.option(
     "--algos",
     "-a",
     multiple=True,
-    help="The stochastic algorithms to be used. Specify multiple with additional -a tags (see example above).",
+    help="The stochastic algorithms to be used. Specify multiple with additional -a tags (see example above). Supported algorithms: direct, tau_leaping, tau_adaptive.",
 )
 @click.option(
     "--nrep", "-n", type=int, help="The number of repetitions in the simulation"
 )
 @click.option(
-    "--nprocs", "-p", type=int, help="The number of processes to be run simultaneously"
+    "--nprocs",
+    "-p",
+    type=int,
+    help="The number of CPU processes to use for accuracy test.",
 )
 @click.option("--save/--no-save", default=False, help="Save results of the simulation")
 def main(lib: str, models: list, algos: list, nrep: int, nprocs: int, save: bool):
