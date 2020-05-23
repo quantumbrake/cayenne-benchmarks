@@ -92,7 +92,7 @@ To compare the speed of the different algorithms, we used a subset of models (5 
 
 # Results
 
-Here we present some example results from our analysis, followed by key take-homes. The details are presented in the notebook available in the notebooks folder above.
+Here we present some example results from our analysis, followed by key take-homes. The details are presented in the [notebook](https://github.com/Heuro-labs/pyssa-benchmarks/blob/master/notebooks/Analysis.ipynb) available in the notebooks folder above or just viewed [here](https://nbviewer.jupyter.org/github/Heuro-labs/pyssa-benchmarks/blob/master/notebooks/Analysis.ipynb).
 
 ## Example results from comparisons
 
