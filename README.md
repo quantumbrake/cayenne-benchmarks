@@ -130,40 +130,81 @@ Yet this comparison is limited because it only explores a single model. A compar
 
 The accuracy tests can be run from the base directory of this repository (which contains `run_simulations.py`). Just run:
 
-```bash
-python run_simulations.py 2 False
+```shell
+Usage: run_simulations.py [OPTIONS]
+
+  Run stochastic simulations for the library (lib), model IDs (models) and
+  algorithms (algos).
+
+  Examples:
+
+  python run_simulations.py --lib pyssa --models 00001 --models 00003
+  --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
+
+  python run_simulations.py -l pyssa -m 00001 -m 00003 -a direct -a
+  tau_leaping -n 10000 -p 4 --save
+
+Options:
+  -l, --lib TEXT        The stochastic simulation library. Supported
+                        libraries: pyssa, BioSimulator, BioSimulatorIntp,
+                        GillespieSSA, Tellurium.
+  -m, --models TEXT     The DSMTS ID of the model to simulate. Specify
+                        multiple with additional -m tags (see example above).
+  -a, --algos TEXT      The stochastic algorithms to be used. Specify multiple
+                        with additional -a tags (see example above). Supported
+                        algorithms: direct, tau_leaping, tau_adaptive.
+  -n, --nrep INTEGER    The number of repetitions in the simulation
+  -p, --nprocs INTEGER  The number of CPU processes to use for accuracy test.
+  --save / --no-save    Save results of the simulation
+  --help                Show this message and exit.
 ```
 
-This will run the accuracy tests on 2 CPU cores and not save the time steps of the simulations. Modifying these, along with choosing which model and libraries to run, are done by editing the `run_simulations.py` file's `__main__` section at the very bottom. The specific parameters which can be modified include:
 
-Parameter | Description | Example value | Type of value
---- | --- | --- | ---
-`N_PROC` | Number of CPU processors to use for the accuracy test| `4` | `int`
-`SAVE_RESULTS` | Whether or not to save the simulation results | `True` or `False` | `str`
-`LIB` | The library to run accuracy tests on | `"BioSimulator"`, `"BioSimulatorIntp"` (interpolate within `BioSimulator.jl`), `"Tellurium"`, `"GillespieSSA"` or `"pyssa"` | `str`
-`MODELS` | The id of the models to run accuracy tests on (corresponding to [SBML test suite][sbmltestsuite]) | `["00001"]` | `List[str]`
-`ALGOS` | The algorithms to run accuracy tests on | `["direct", "tau_leaping"]` | `List[str]`
-`N_REP` | The number of times to repeat the simulations of a given model | `10000` | `int`
+For example, we can run a simulation as follows:
+
+```bash
+python run_simulations.py --lib pyssa --models 00001 --models 00003 --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
+```
+
+This will run the accuracy tests for the models "00001" and "00003" using the library pyssa's tau_leaping algorithm on 4 CPU cores and will save the time steps of the simulations.
+
 
 ## Speed tests
 
 The accuracy tests can be run from the base directory of this repository (which contains `run_benchmarks.py`). Just run:
 
-```bash
-python run_benchmarks.py <LIB> <MODEL> <ALGO> <NREP>
+```shell
+Usage: run_benchmarks.py [OPTIONS]
+
+  Benchmark a stochastic simulation for a given library (lib), model ID
+  (model) and algorithm (algo).
+
+  NOTE: You need `hyperfine` installed to run this script. It can be found
+  here: https://github.com/sharkdp/hyperfine .
+
+  Examples:
+
+  python run_benchmarks --lib pyssa --model 00001 --algo direct --nrep 10000
+
+  python run_benchmarks -l pyssa -m 00001 -a direct -n 10000
+
+Options:
+  -l, --lib TEXT         The stochastic simulation library. Supported
+                         libraries: pyssa, BioSimulator, BioSimulatorIntp,
+                         GillespieSSA, Tellurium.
+  -m, --model TEXT       The DSMTS ID of the model to benchmark
+  -a, --algo TEXT        The stochastic algorithm to benchmark. Supported
+                         algorithms: direct, tau_leaping, tau_adaptive.
+  -n, --nrep INTEGER     The number of repetitions in the stochastic
+                         simulation (typically ~10000)
+  -t, --timeout INTEGER  Seconds to wait until timeout
+  --help                 Show this message and exit.
 ```
-
-This will run the speed benchmarks for the specified library, model and algorithm combination for the specified number of repetitions.
-
-Parameter | Description | Example values
---- | --- | ---
-LIB | The library to run speed benchmarks on | BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium, pyssa |
-MODEL | The model id (corresponding to [SBML test suite][sbmltestsuite]) | 00001, 00003
-ALGO | The algorithm to run | One of `direct`, `tau_leaping` and `tau_adaptive`. The exact algorithm depends on the library (see [above](#libraries-compared)).
-NREP | The number of repetitions of the model to calculate a single estimate of run-time. | 10000
 
 For example, we can invoke a speed benchmark as follows:
 
 ```bash
-python run_benchmarks.py pyssa 00001 direct 10000
+python run_benchmarks --lib pyssa --model 00001 --algo direct --nrep 10000
 ```
+
+This will run the speed benchmarks for the pyssa library, 00001 model and direct algorithm for 10,000 repetitions. This will be run 7 times to get summary statistics.
