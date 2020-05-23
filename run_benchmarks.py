@@ -4,6 +4,8 @@ import pathlib
 from subprocess import Popen, PIPE, TimeoutExpired
 import sys
 
+import click
+
 from run_simulations import get_cmd
 
 
@@ -36,25 +38,20 @@ def get_benchmark_cmd(lib: str, model: str, algo: str, nrep: int) -> str:
     return fname, benchmark_cmd
 
 
+@click.command()
+@click.option("--lib", type=str, help="The stochastic simulation library")
+@click.option("--model", type=str, help="The model ID")
+@click.option("--algo", type=str, help="The stochastic algorithm to be used")
+@click.option(
+    "--nrep", type=int, help="The number of repetitions in the stochastic simulation"
+)
+@click.option(
+    "--timeout", default=10_000, type=int, help="Seconds to wait until timeout"
+)
 def benchmark_simulation(
-    lib: str, model: str, algo: str, nrep: int, timeout: int = 10_000
+    lib: str, model: str, algo: str, nrep: int, timeout: int
 ) -> None:
-    """
-        Benchmark the stochastic simulation
-
-        Parameters
-        ----------
-        lib : str
-            The stochastic simulation library to be used
-        model : str
-            The id of the model to be simulated
-        algo : {direct, tau_leaping, tau_adaptive}
-            The algorithm to be used for the simulations
-        nrep : int
-            The number of repetitions in the stochastic simulation
-        timeout : int
-            The subproces timeout value
-    """
+    """ Benchmark the stochastic simulation """
     print(
         f"Running library: {lib}, algorithm: {algo}, model: {model} with nrep = {nrep}"
     )
@@ -77,8 +74,4 @@ def benchmark_simulation(
 
 
 if __name__ == "__main__":
-    LIB = sys.argv[1]
-    MODEL = sys.argv[2]
-    ALGO = sys.argv[3]
-    NREP = int(sys.argv[4])
-    benchmark_simulation(LIB, MODEL, ALGO, NREP)
+    benchmark_simulation()
