@@ -1,7 +1,7 @@
 {
   "results": [
     {
-      "command": "python pyssa_test/make_pyssa_results.py 00038 tau_leaping 10000 False",
+      "command": "python cayenne_test/make_cayenne_results.py 00038 tau_leaping 10000 False",
       "mean": 2.8282825068514286,
       "stddev": 0.2544004442061202,
       "median": 2.7396244582800002,

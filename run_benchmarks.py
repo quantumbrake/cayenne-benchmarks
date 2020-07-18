@@ -41,7 +41,7 @@ def get_benchmark_cmd(lib: str, model: str, algo: str, nrep: int) -> str:
     "--lib",
     "-l",
     type=str,
-    help="The stochastic simulation library. Supported libraries: pyssa, BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium.",
+    help="The stochastic simulation library. Supported libraries: cayenne, BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium.",
 )
 @click.option("--model", "-m", type=str, help="The DSMTS ID of the model to benchmark")
 @click.option(
@@ -69,9 +69,9 @@ def main(lib: str, model: str, algo: str, nrep: int, timeout: int) -> None:
 
         Examples:
 
-        python run_benchmarks --lib pyssa --model 00001 --algo direct --nrep 10000
+        python run_benchmarks --lib cayenne --model 00001 --algo direct --nrep 10000
 
-        python run_benchmarks -l pyssa -m 00001 -a direct -n 10000
+        python run_benchmarks -l cayenne -m 00001 -a direct -n 10000
     """
     print(
         f"Running library: {lib}, algorithm: {algo}, model: {model} with nrep = {nrep}"

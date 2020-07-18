@@ -1,7 +1,7 @@
 {
   "results": [
     {
-      "command": "python pyssa_test/make_pyssa_results.py 00030 tau_adaptive 10000 False",
+      "command": "python cayenne_test/make_cayenne_results.py 00030 tau_adaptive 10000 False",
       "mean": 1.970614151124286,
       "stddev": 0.09293309766339063,
       "median": 1.93831941841,

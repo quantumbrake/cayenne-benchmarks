@@ -13,7 +13,7 @@ black = "==19.3b0"
 pre-commit = "*"
 
 [packages]
-pyssa = "*"
+cayenne = "*"
 tellurium = "*"
 
 [requires]

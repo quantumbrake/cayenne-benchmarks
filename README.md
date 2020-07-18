@@ -30,7 +30,7 @@ We compare the 4 libraries across Python, R and Julia. These are listed below al
 
 Library | Language | Algorithm name in library | Algorithm name in our comparison | Standard name of algorithm
 ---| --- | --- | --- | ----
-pyssa (v0.9.1) | Python (v3.6.9) | `direct` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
+cayenne (v0.9.1) | Python (v3.6.9) | `direct` | `direct` | Gillespie's Direct method ([Gillespie1973][direct])
 | | | `tau_leaping` | `tau_leaping` | Standard tau leaping ([Gillespie2001][tau_leaping] also see [Wikipedia][tau_leaping_wiki])
 | | | `tau_adaptive` | `tau_adaptive` | Tau leaping with efficient step size selection ([Cao. et al. 2006][tau_adaptive])
 Tellurium (v2.1.5) | Python (v3.6.9) | `gillespie` | `direct` | Unknown (see [here](https://tellurium.readthedocs.io/en/latest/_notebooks/core/tellurium_stochastic.html?highlight=gillespie#stochastic-simulation)), likely similar to Gillespie's Direct Method
@@ -52,13 +52,13 @@ BioSimulator.jl (v0.9.3)| Julia (v1.4.0) | `Direct` | `direct` |  Gillespie's Di
 
 | | direct|	tau_leaping |	tau_adaptive |
 --- | --- |--- | --- |
-pyssa	| :heavy_check_mark: Most accurate yet	| :heavy_check_mark: Very fast but may need manual tuning|	Less accurate than GillespieSSA's version|
+cayenne	| :heavy_check_mark: Most accurate yet	| :heavy_check_mark: Very fast but may need manual tuning|	Less accurate than GillespieSSA's version|
 Tellurium | :exclamation: Inaccurate for 2nd order | N/A | N/A |
 GillespieSSA | Very slow |:exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
 BioSimulator.jl |	:exclamation: Inaccurate interpolation | :exclamation: Inaccurate for initial zero counts | :exclamation: Inaccurate for initial zero counts
 
-- From this table above, a user is best off starting with `pyssa`'s `direct` algorithm. It is accurate for several different model configurations.
-- If `direct` is too slow, `pyssa`'s `tau_leaping` may be considered. This may require some hand-tuning of the `tau` parameter depending on the system. But we found that fixing the value to `0.1` sufficed for most of the accuracy tests.
+- From this table above, a user is best off starting with `cayenne`'s `direct` algorithm. It is accurate for several different model configurations.
+- If `direct` is too slow, `cayenne`'s `tau_leaping` may be considered. This may require some hand-tuning of the `tau` parameter depending on the system. But we found that fixing the value to `0.1` sufficed for most of the accuracy tests.
 - Other algorithms and packages may be considered if the system under consideration does not begin with initial amounts set to zero or if there aren't higher order reactions.
 
 # Methods
@@ -73,11 +73,11 @@ To compare the accuracies of the algorithms, we used a subset of the models reco
 
 These decisions are in line with what is recommended in the [SBML test suite][sbmltestsuite].
 
-### Interpolating with `pyssa`'s backend
+### Interpolating with `cayenne`'s backend
 
-Stochastic simulation algorithms return the states of the model at random time points (e.g. at time points $t=9.6$ and $t=10.2$ seconds). However, the accuracy tests demand values at specific time points (e.g at $t=10$ seconds). To get the values at the time points needed for accuracy tests, we used `pyssa`'s backend which implements this functionality.
+Stochastic simulation algorithms return the states of the model at random time points (e.g. at time points $t=9.6$ and $t=10.2$ seconds). However, the accuracy tests demand values at specific time points (e.g at $t=10$ seconds). To get the values at the time points needed for accuracy tests, we used `cayenne`'s backend which implements this functionality.
 
-While GillespieSSA and Tellurium do not interpolate in their backends to provide values at specific time points, BioSimulator does possess this functionality. To investigate the effect of different interpolation techniques, we compared BioSimulator's internal interpolation with the raw BioSimulator results interpolated in `pyssa`. We call the former `BioSimulatorIntp` (results are interpolated within `BioSimulator.jl`) in our discussion.
+While GillespieSSA and Tellurium do not interpolate in their backends to provide values at specific time points, BioSimulator does possess this functionality. To investigate the effect of different interpolation techniques, we compared BioSimulator's internal interpolation with the raw BioSimulator results interpolated in `cayenne`. We call the former `BioSimulatorIntp` (results are interpolated within `BioSimulator.jl`) in our discussion.
 
 [sbmltestsuite]: https://github.com/sbmlteam/sbml-test-suite/blob/master/cases/stochastic/DSMTS-userguide-31v2.pdf
 
@@ -92,7 +92,7 @@ To compare the speed of the different algorithms, we used a subset of models (5 
 
 # Results
 
-Here we present some example results from our analysis, followed by key take-homes. The details are presented in the [notebook](https://github.com/Heuro-labs/pyssa-benchmarks/blob/master/notebooks/Analysis.ipynb) available in the notebooks folder above or just viewed [here](https://nbviewer.jupyter.org/github/Heuro-labs/pyssa-benchmarks/blob/master/notebooks/Analysis.ipynb).
+Here we present some example results from our analysis, followed by key take-homes. The details are presented in the [notebook](https://github.com/Heuro-labs/cayenne-benchmarks/blob/master/notebooks/Analysis.ipynb) available in the notebooks folder above or just viewed [here](https://nbviewer.jupyter.org/github/Heuro-labs/cayenne-benchmarks/blob/master/notebooks/Analysis.ipynb).
 
 ## Example results from comparisons
 
@@ -107,21 +107,21 @@ The plot above shows accuracy on the X axis and speed on the Y axis, for one of 
 - Library-wise, we see the following trends:
   - `BioSimulator.jl`'s approximate algorithms are inaccurate.
   - `GillespieSSA` is accurate but slow.
-  - The naive `tau_leaping` implemented in `pyssa` is both fast and accurate.
+  - The naive `tau_leaping` implemented in `cayenne` is both fast and accurate.
 
 Yet this comparison is limited because it only explores a single model. A comparison of accuracy for different models, followed by speed for different models are presented below.
 
 ### Accuracy
 
 - The direct algorithm was generally accurate across the packages tested. The exceptions are
-  - `BioSimulator.jl` appears to interpolate values poorly. When BioSimulator's raw results were interpolated with `pyssa`'s backend, the accuracy was restored.
+  - `BioSimulator.jl` appears to interpolate values poorly. When BioSimulator's raw results were interpolated with `cayenne`'s backend, the accuracy was restored.
   - `Tellurium`'s appears to be inaccurate when reactions are second order (usually occurs when there are two reactants).
 - The approximate algorithms on average performed poorly compared to their direct counterparts across different models. Some systemic bugs/defects we identified are:
   - `BioSimulator.jl` and `GillespieSSA` fail to simulate the system if the number of molecules is initially zero. They don't account for zero order reactions which can result in valid simulations, such as migration into the system.
 
 ### Speed
 
-- `pyssa`, `BioSimulator` and `Tellurium` were similar in speed.
+- `cayenne`, `BioSimulator` and `Tellurium` were similar in speed.
 - `GillespieSSA` was at least an order of magnitude slower than the rest of the packages. This was observed across different models and algorithms.
 
 # How to run the code in this repository
@@ -138,15 +138,15 @@ Usage: run_simulations.py [OPTIONS]
 
   Examples:
 
-  python run_simulations.py --lib pyssa --models 00001 --models 00003
+  python run_simulations.py --lib cayenne --models 00001 --models 00003
   --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
 
-  python run_simulations.py -l pyssa -m 00001 -m 00003 -a direct -a
+  python run_simulations.py -l cayenne -m 00001 -m 00003 -a direct -a
   tau_leaping -n 10000 -p 4 --save
 
 Options:
   -l, --lib TEXT        The stochastic simulation library. Supported
-                        libraries: pyssa, BioSimulator, BioSimulatorIntp,
+                        libraries: cayenne, BioSimulator, BioSimulatorIntp,
                         GillespieSSA, Tellurium.
   -m, --models TEXT     The DSMTS ID of the model to simulate. Specify
                         multiple with additional -m tags (see example above).
@@ -163,10 +163,10 @@ Options:
 For example, we can run a simulation as follows:
 
 ```bash
-python run_simulations.py --lib pyssa --models 00001 --models 00003 --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
+python run_simulations.py --lib cayenne --models 00001 --models 00003 --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
 ```
 
-This will run the accuracy tests for the models "00001" and "00003" using the library pyssa's tau_leaping algorithm on 4 CPU cores and will save the time steps of the simulations.
+This will run the accuracy tests for the models "00001" and "00003" using the library cayenne's tau_leaping algorithm on 4 CPU cores and will save the time steps of the simulations.
 
 
 ## Speed tests
@@ -184,13 +184,13 @@ Usage: run_benchmarks.py [OPTIONS]
 
   Examples:
 
-  python run_benchmarks --lib pyssa --model 00001 --algo direct --nrep 10000
+  python run_benchmarks --lib cayenne --model 00001 --algo direct --nrep 10000
 
-  python run_benchmarks -l pyssa -m 00001 -a direct -n 10000
+  python run_benchmarks -l cayenne -m 00001 -a direct -n 10000
 
 Options:
   -l, --lib TEXT         The stochastic simulation library. Supported
-                         libraries: pyssa, BioSimulator, BioSimulatorIntp,
+                         libraries: cayenne, BioSimulator, BioSimulatorIntp,
                          GillespieSSA, Tellurium.
   -m, --model TEXT       The DSMTS ID of the model to benchmark
   -a, --algo TEXT        The stochastic algorithm to benchmark. Supported
@@ -204,7 +204,7 @@ Options:
 For example, we can invoke a speed benchmark as follows:
 
 ```bash
-python run_benchmarks --lib pyssa --model 00001 --algo direct --nrep 10000
+python run_benchmarks --lib cayenne --model 00001 --algo direct --nrep 10000
 ```
 
-This will run the speed benchmarks for the pyssa library, 00001 model and direct algorithm for 10,000 repetitions. This will be run 7 times to get summary statistics.
+This will run the speed benchmarks for the cayenne library, 00001 model and direct algorithm for 10,000 repetitions. This will be run 7 times to get summary statistics.

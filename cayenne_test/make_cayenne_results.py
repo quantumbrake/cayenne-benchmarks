@@ -5,7 +5,7 @@ import os
 import sys
 
 import numpy as np
-from pyssa import Simulation
+from cayenne import Simulation
 
 from models import get_model
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     ALGO = sys.argv[2]
     N_REPS = int(sys.argv[3])
     WRITE_RESULTS_FLAG = sys.argv[4]
-    DIR_PATH = pathlib.Path(f"./results/{MODEL_ID}/pyssa_{ALGO}/")
+    DIR_PATH = pathlib.Path(f"./results/{MODEL_ID}/cayenne_{ALGO}/")
     results = run_model(MODEL_ID, ALGO, N_REPS)
     if WRITE_RESULTS_FLAG == "True":
         write_model(results, DIR_PATH, N_REPS)

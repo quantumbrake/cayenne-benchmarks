@@ -1,7 +1,7 @@
 {
   "results": [
     {
-      "command": "python pyssa_test/make_pyssa_results.py 00001 direct 10000 False",
+      "command": "python cayenne_test/make_cayenne_results.py 00001 direct 10000 False",
       "mean": 6.367574160887144,
       "stddev": 0.8070970164308666,
       "median": 6.06318282003,

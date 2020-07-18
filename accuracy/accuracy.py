@@ -14,7 +14,7 @@ from .helpers import (
 )
 import numpy as np
 
-# @profile
+
 def test_accuracy(id_: str, library: str, algo: str, nrep: int):
     """Test the accuracy for a given model, library, algorithm and number
     of reps.

@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from pyssa.results import Results
+from cayenne.results import Results
 
 
 def read_results_analytical(test_id: str):
@@ -99,7 +99,7 @@ def get_results_from_index(res: Results, ind: int):
     Parameters
     ----------
     res
-        A pyssa.Results object.
+        A cayenne.Results object.
     ind
         The index to return simulation states at. 0 will return the first
         time point.
@@ -131,7 +131,7 @@ def calculate_zy(
     Parameters
     ----------
     res
-        A pyssa.Results object.
+        A cayenne.Results object.
     time_arr
         List of time points at which analytical solutions are available.
     mu_analytical
@@ -224,7 +224,7 @@ def calculate_zy_2sp(
     Parameters
     ----------
     res
-        A pyssa.Results object.
+        A cayenne.Results object.
     time_arr
         List of time points at which analytical solutions are available.
     mu_analytical
@@ -316,7 +316,7 @@ def read_results_simulation(
     Returns
     -------
     res: Results
-        A `pyssa.Results` object containing the results.
+        A `cayenne.Results` object containing the results.
     """
     x_list = []
     t_list = []
@@ -368,7 +368,7 @@ def read_results_simulation_2sp(
     Returns
     -------
     res: Results
-        A `pyssa.Results` object containing the results.
+        A `cayenne.Results` object containing the results.
     """
     x_list = []
     t_list = []

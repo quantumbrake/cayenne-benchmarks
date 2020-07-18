@@ -25,8 +25,8 @@ def get_cmd(lib, model, algo, nrep):
         cmd = f"python tellurium_test/make_tel_results.py {model} {nrep}"
     elif lib == "GillespieSSA":
         cmd = f"Rscript GillespieSSA_test/make_gillespieSSA_results.R {model} {algo} {nrep}"
-    elif lib == "pyssa":
-        cmd = f"python pyssa_test/make_pyssa_results.py {model} {algo} {nrep}"
+    elif lib == "cayenne":
+        cmd = f"python cayenne_test/make_cayenne_results.py {model} {algo} {nrep}"
     else:
         raise ValueError(f"Unsupported library: {lib}")
     return cmd
@@ -117,7 +117,7 @@ def update_file(file_name, data_list):
     "--lib",
     "-l",
     type=str,
-    help="The stochastic simulation library. Supported libraries: pyssa, BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium.",
+    help="The stochastic simulation library. Supported libraries: cayenne, BioSimulator, BioSimulatorIntp, GillespieSSA, Tellurium.",
 )
 @click.option(
     "--models",
@@ -147,9 +147,9 @@ def main(lib: str, models: list, algos: list, nrep: int, nprocs: int, save: bool
 
         Examples:
 
-        python run_simulations.py --lib pyssa --models 00001 --models 00003 --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
+        python run_simulations.py --lib cayenne --models 00001 --models 00003 --algos direct --algos tau_leaping --nrep 10000 --nprocs 4 --save
 
-        python run_simulations.py -l pyssa -m 00001 -m 00003 -a direct -a tau_leaping -n 10000 -p 4 --save
+        python run_simulations.py -l cayenne -m 00001 -m 00003 -a direct -a tau_leaping -n 10000 -p 4 --save
     """
     simulation_args = []
     for model in models:

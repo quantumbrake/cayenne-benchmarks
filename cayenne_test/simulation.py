@@ -4,10 +4,10 @@ import sys
 import time
 
 import numpy as np
-from pyssa import Simulation
+from cayenne import Simulation
 
 
-def pyssa_simulation(algorithm):
+def cayenne_simulation(algorithm):
     V_r = np.array([[1, 2, 0, 0], [0, 0, 1, 1], [0, 0, 0, 0]], dtype=np.int)
     V_p = np.array([[0, 0, 2, 0], [0, 1, 0, 0], [0, 0, 0, 1]], dtype=np.int)
     X0 = np.array([4150, 39565, 3445], dtype=np.int)
@@ -33,7 +33,7 @@ def plot_results(sim, algorithm):
 if __name__ == "__main__":
     algorithm = sys.argv[1]
     start_time = time.time()
-    sim = pyssa_simulation(algorithm)
+    sim = cayenne_simulation(algorithm)
     end_time = time.time()
     print(f"Elapsed time in seconds: {end_time - start_time}")
     # plot_results(sim, algorithm)

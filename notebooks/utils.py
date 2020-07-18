@@ -10,7 +10,7 @@ import seaborn as sns
 
 PALETTE_5 = sns.color_palette("Set1", n_colors=5)
 LIB_PALETTE = {
-    "pyssa": PALETTE_5[1],
+    "cayenne": PALETTE_5[1],
     "BioSimulator": PALETTE_5[0],
     "BioSimulatorIntp": PALETTE_5[2],
     "GillespieSSA": PALETTE_5[3],

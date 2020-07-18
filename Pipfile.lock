@@ -503,7 +503,7 @@
             ],
             "version": "==0.14.11"
         },
-        "pyssa": {
+        "cayenne": {
             "hashes": [
                 "sha256:9c628cac789c92dede8ba6f6285dd7154d0b233fc7288f0be20cd555fe2df592"
             ],

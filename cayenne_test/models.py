@@ -5,7 +5,7 @@
 import csv
 import pathlib
 import numpy as np
-from pyssa.utils import Na
+from cayenne.utils import Na
 
 
 def setup_00001():
