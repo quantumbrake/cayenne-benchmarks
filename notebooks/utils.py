@@ -77,6 +77,7 @@ def make_accuracy_df(filename: str, use_ratio_for_approx=True):
 def make_benchmark_df(path):
     """ Compile all benchmark results into a pandas dataframe """
     files = list(pathlib.Path(path).glob("*.json"))
+    print(files)
     results = []
     for this_file in files:
         with open(this_file) as fid:
@@ -89,6 +90,8 @@ def make_benchmark_df(path):
             this_result["nrep"] = int(nreps)
             results.append(this_result)
     df = pd.DataFrame(results)
+    print(results)
+    print(df)
     df = df[df.nrep == 10000]
     return df
 
