@@ -3,7 +3,10 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
+from matplotlib.legend_handler import HandlerPatch
+from matplotlib.lines import Line2D
 
 from cayenne.results import Results
 
@@ -333,7 +336,11 @@ def read_results_simulation(
         x_list.append(contents["S1"].values.reshape(contents.shape[0], 1))
         status_list.append(0)
         sim_seeds.append(0)
-    res = Results(t_list, x_list, status_list, algo, sim_seeds)
+    species_names = [f"species_{i}" for i in range(x_list[0].shape[1])]
+    rxn_names = ["X"]
+    res = Results(
+        species_names, rxn_names, t_list, x_list, status_list, algo, sim_seeds
+    )
     return res
 
 
@@ -417,16 +424,16 @@ def make_zy_plot(
     ax
         Axis object to plot on.
     """
-    ax.plot(time_pts, value_obs)
+    ax.plot(time_pts, value_analytical)
     for i in range(len(stat)):
         if -stat_thresh <= stat[i] <= stat_thresh:
             marker = "green"
         else:
             marker = "red"
-        ax.plot(time_pts[i + 1], value_analytical[i + 1], ".", color=marker)
+        ax.plot(time_pts[i + 1], value_obs[i + 1], ".", color=marker)
 
 
-# TODO: Use calculate_ms_ratios function instead
+# NOTE: Use calculate_ms_ratios function instead
 def make_ratio_plot(
     time_pts: np.array,
     value_obs: np.array,
@@ -438,9 +445,9 @@ def make_ratio_plot(
 
     """
     stat_lb, stat_ub = stat_thresh[0], stat_thresh[1]
-    ax.axhline(y=1.0, alpha=0.8)
-    ax.axhline(y=stat_lb, linestyle="--")
-    ax.axhline(y=stat_ub, linestyle="--")
+    ax.axhline(y=1.0, alpha=0.8, color="black")
+    ax.axhline(y=stat_lb, linestyle="--", color="black")
+    ax.axhline(y=stat_ub, linestyle="--", color="black")
     for i in range(time_pts.shape[0]):
         obs, analytical = value_obs[i], value_analytical[i]
         try:
@@ -490,16 +497,39 @@ def make_plot(
     name = plt_name.split("/")[1].split(".")[0]
     fig.suptitle(name)
     make_zy_plot(time_arr, mu_obs, mu_analytical, Z, 3, ax[0, 0])
-    ax[0, 0].set_ylabel("Observed mean")
+    ax[0, 0].set_ylabel(r"$\mu$")
     make_zy_plot(time_arr, std_obs, std_analytical, Y, 5, ax[0, 1])
-    ax[0, 1].set_ylabel("Observed sd")
+    ax[0, 1].set_ylabel(r"$\sigma$")
     make_ratio_plot(time_arr, mu_obs, mu_analytical, [0.98, 1.02], ax[1, 0])
     ax[1, 0].set_ylabel(r"$\mu$ ratio")
     ax[1, 0].set_xlabel("time")
     make_ratio_plot(time_arr, std_obs, std_analytical, [0.98, 1.02], ax[1, 1])
     ax[1, 1].set_ylabel(r"$\sigma$ ratio")
     ax[1, 1].set_xlabel("time")
-    fig.savefig(plt_name)
+    green_patch = Line2D(
+        [0], [0], marker=".", color="w", markerfacecolor="green", markersize=15
+    )
+    red_patch = Line2D(
+        [0], [0], marker=".", color="w", markerfacecolor="red", markersize=15
+    )
+    analytical_patch = Line2D([0], [0])
+    ratio_patch = Line2D([0], [0], color="black")
+    ratioborder_patch = Line2D([0], [0], linestyle="--", color="black")
+    text_labels = [
+        "Accurate (Simulation)",
+        "Inaccurate (Simulation)",
+        "Analytical solution",
+        "Ratio (expected)",
+        "Ratio (threshold)",
+    ]
+    lgd = fig.legend(
+        [green_patch, red_patch, analytical_patch, ratio_patch, ratioborder_patch],
+        text_labels,
+        loc="upper left",
+        bbox_to_anchor=(1.02, 0.9),
+        fontsize="small",
+    )
+    fig.savefig(plt_name, bbox_extra_artists=(lgd,), bbox_inches="tight")
 
 
 def make_plot_2sp(
