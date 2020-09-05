@@ -9,12 +9,15 @@ python-language-server = "*"
 pylint = "*"
 mypy = "*"
 ipython = "*"
+jupyter = "*"
 black = "==19.3b0"
 pre-commit = "*"
 
 [packages]
+click = "*"
 cayenne = "*"
 tellurium = "*"
+seaborn = "*"
 
 [requires]
 python_version = "3.6"
