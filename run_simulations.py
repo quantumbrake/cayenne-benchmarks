@@ -26,7 +26,7 @@ def get_cmd(lib, model, algo, nrep):
     elif lib == "GillespieSSA":
         cmd = f"Rscript GillespieSSA_test/make_gillespieSSA_results.R {model} {algo} {nrep}"
     elif lib == "cayenne":
-        cmd = f"python cayenne_test/make_cayenne_results.py {model} {algo} {nrep}"
+        cmd = f"python cayenne_test/make_cayenne_results.py {model} {algo} {nrep} True"
     else:
         raise ValueError(f"Unsupported library: {lib}")
     return cmd

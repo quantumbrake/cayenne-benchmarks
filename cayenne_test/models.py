@@ -19,6 +19,8 @@ def setup_00001():
 
         A0 = 100, max_t = 51, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[1, 1]])
     V_p = np.array([[2, 0]])
     X0 = np.array([100], dtype=np.int64)
@@ -26,15 +28,7 @@ def setup_00001():
     max_t = 51
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00003():
@@ -48,6 +42,8 @@ def setup_00003():
 
         A0 = 100, max_t = 51, max_iter = 1e5
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[1, 1]])
     V_p = np.array([[2, 0]])
     X0 = np.array([100], dtype=np.int64)
@@ -55,15 +51,7 @@ def setup_00003():
     max_t = 51
     max_iter = int(1e5)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00004():
@@ -77,6 +65,8 @@ def setup_00004():
 
         A0 = 10, max_t = 51, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[1, 1]])
     V_p = np.array([[2, 0]])
     X0 = np.array([10], dtype=np.int64)
@@ -84,15 +74,7 @@ def setup_00004():
     max_t = 51
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00005():
@@ -106,6 +88,8 @@ def setup_00005():
 
         A0 = 10_000, max_t = 51, max_iter = 5e5
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[1, 1]])
     V_p = np.array([[2, 0]])
     X0 = np.array([10_000], dtype=np.int64)
@@ -113,15 +97,7 @@ def setup_00005():
     max_t = 51
     max_iter = int(5e5)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00011():
@@ -135,6 +111,8 @@ def setup_00011():
 
         A0 = 100, max_t = 51, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[1, 1]])
     V_p = np.array([[2, 0]])
     X0 = np.array([100], dtype=np.int64)
@@ -144,15 +122,7 @@ def setup_00011():
     max_t = 51
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00020():
@@ -166,6 +136,8 @@ def setup_00020():
 
         A0 = 0, max_t = 52, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[1, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -174,15 +146,7 @@ def setup_00020():
     # we did 52 because direct would stop earlier than 50, but we want at least 50 crossed.
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00021():
@@ -196,6 +160,8 @@ def setup_00021():
 
         A0 = 0, max_t = 51, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[1, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -203,15 +169,7 @@ def setup_00021():
     max_t = 51
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00022():
@@ -225,6 +183,8 @@ def setup_00022():
 
         A0 = 0, max_t = 51, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[1, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -232,15 +192,7 @@ def setup_00022():
     max_t = 51
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00023():
@@ -254,6 +206,8 @@ def setup_00023():
 
         A0 = 0, max_t = 51, max_iter = 1.5e5
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[1, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -261,15 +215,7 @@ def setup_00023():
     max_t = 51
     max_iter = int(1.5e5)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00030():
@@ -287,6 +233,8 @@ def setup_00030():
         deterministic or stochastic. They end up using k1_stoc = 0.001. To have
         k1_stoc = 0.001, we should set k1_det = 0.001/2.
     """
+    species_names = ["A", "A2"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[2, 0], [0, 1]])
     V_p = np.array([[0, 2], [1, 0]])
     X0 = np.array([100, 0], dtype=np.int64)
@@ -294,15 +242,7 @@ def setup_00030():
     max_t = 55
     max_iter = int(1.5e5)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00031():
@@ -320,6 +260,8 @@ def setup_00031():
         deterministic or stochastic. They end up using k1_stoc = 0.0002. To
         have k1_stoc = 0.0002, we should set k1_det = 0.0002/2.
     """
+    species_names = ["A", "A2"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[2, 0], [0, 1]])
     V_p = np.array([[0, 2], [1, 0]])
     X0 = np.array([1000, 0], dtype=np.int64)
@@ -327,15 +269,7 @@ def setup_00031():
     max_t = 52
     max_iter = int(1.5e5)
     n_rep = 20
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00037():
@@ -349,6 +283,8 @@ def setup_00037():
 
         A0 = 0, max_t = 53, max_iter = 1.5e3
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[5, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -356,15 +292,7 @@ def setup_00037():
     max_t = 53
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00038():
@@ -383,6 +311,8 @@ def setup_00038():
         technically k2 = k2_stoc. They instead use kstoc = 0.4 in the model
         file, so this value is used.
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[10, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -390,15 +320,7 @@ def setup_00038():
     max_t = 53
     max_iter = int(1.5e3)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
 
 
 def setup_00039():
@@ -417,6 +339,8 @@ def setup_00039():
         technically k2 = k2_stoc. They instead use kstoc = 4.0 in the model
         file, so this value is used.
     """
+    species_names = ["A"]
+    rxn_names = ["r1", "r2"]
     V_r = np.array([[0, 1]])
     V_p = np.array([[100, 0]])
     X0 = np.array([0], dtype=np.int64)
@@ -424,15 +348,8 @@ def setup_00039():
     max_t = 53
     max_iter = int(1.5e5)
     n_rep = 10
-    return (
-        V_r,
-        V_p,
-        X0,
-        k,
-        max_t,
-        max_iter,
-        n_rep,
-    )
+    return (species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, n_rep)
+
 
 def get_model(model_id):
     """ Returns model given model_id """

@@ -12,7 +12,7 @@ def cayenne_simulation(algorithm):
     V_p = np.array([[0, 0, 2, 0], [0, 1, 0, 0], [0, 0, 0, 1]], dtype=np.int)
     X0 = np.array([4150, 39565, 3445], dtype=np.int)
     k = np.array([1, 0.002, 0.5, 0.04])
-    sim = Simulation(V_r, V_p, X0, k)
+    sim = Simulation(species_names=["A", "B", "C"], rxn_names=["1", "2", "3", "4"], V_r, V_p, X0, k)
     sim.simulate(
         algorithm=algorithm,
         max_t=10,

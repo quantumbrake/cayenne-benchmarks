@@ -11,8 +11,8 @@ from models import get_model
 
 
 def run_model(model_id, algorithm, n_rep):
-    V_r, V_p, X0, k, max_t, max_iter, _ = get_model(model_id)
-    sim = Simulation(V_r, V_p, X0, k)
+    species_names, rxn_names, V_r, V_p, X0, k, max_t, max_iter, _ = get_model(model_id)
+    sim = Simulation(species_names, rxn_names, V_r, V_p, X0, k)
     sim.simulate(
         algorithm=algorithm,
         max_t=max_t,
@@ -23,15 +23,16 @@ def run_model(model_id, algorithm, n_rep):
     )
     return sim.results
 
+
 def write_model(results, dir_path, n_reps):
     os.makedirs(dir_path, exist_ok=True)
     for i, (x, t, _) in enumerate(results):
         file_name = f"{dir_path}/{i + 1}.csv"
-        sim = np.hstack([t.reshape(x.shape[0],1), x])
+        sim = np.hstack([t.reshape(x.shape[0], 1), x])
         if x.shape[1] == 1:
-            np.savetxt(file_name, sim, delimiter=",", fmt = ["%.8e", "%d"])
+            np.savetxt(file_name, sim, delimiter=",", fmt=["%.8e", "%d"])
         else:
-            np.savetxt(file_name, sim, delimiter=",", fmt = ["%.8e", "%d", "%d"])
+            np.savetxt(file_name, sim, delimiter=",", fmt=["%.8e", "%d", "%d"])
 
 
 if __name__ == "__main__":
