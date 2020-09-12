@@ -10,9 +10,9 @@ import seaborn as sns
 
 PALETTE_5 = sns.color_palette("Set1", n_colors=5)
 LIB_PALETTE = {
-    "cayenne": PALETTE_5[1],
-    "BioSimulator": PALETTE_5[0],
-    "BioSimulatorIntp": PALETTE_5[2],
+    "Cayenne": PALETTE_5[1],
+    "BioSimulator-CI": PALETTE_5[0],
+    "BioSimulator": PALETTE_5[2],
     "GillespieSSA": PALETTE_5[3],
     "Tellurium": PALETTE_5[4],
 }
@@ -23,14 +23,38 @@ ALGO_PALETTE = {
     "tau_adaptive": PALETTE_3[2],
 }
 
+MODELID_NAME_DICT = {
+    "00001": "001-01",
+    "00003": "001-03",
+    "00004": "001-04",
+    "00005": "001-05",
+    "00011": "001-11",
+    "00020": "002-01",
+    "00021": "002-02",
+    "00022": "002-03",
+    "00023": "002-04",
+    "00030": "003-01",
+    "00031": "003-02",
+    "00037": "004-01",
+    "00038": "004-02",
+    "00039": "004-03",
+}
+LIBID_NAME_DICT = {
+    "BioSimulator": "BioSimulator-CI",
+    "BioSimulatorIntp": "BioSimulator",
+    "cayenne": "Cayenne",
+}
+
 
 def make_accuracy_df(filename: str, use_ratio_for_approx=True):
     """ Compile all accuracy results into a pandas dataframe """
     full_algos = ["direct"]
     approx_algos = ["tau_leaping", "tau_adaptive"]
     df = pd.read_csv(filename, dtype={"model": str})
+    df.replace({"model": MODELID_NAME_DICT}, inplace=True)
+    df.replace({"lib": LIBID_NAME_DICT}, inplace=True)
     df.loc[:, "nspecies"] = 1
-    df.loc[df.model.isin(["00030", "00031"]), "nspecies"] = 2
+    df.loc[df.model.isin(["003-01", "003-02"]), "nspecies"] = 2
     df.loc[:, "ntest"] = df.nspecies * 100  # number of tests
     # Number passing should be ntest
     full_inds = df.algo.isin(full_algos)
@@ -89,6 +113,8 @@ def make_benchmark_df(path):
             this_result["nrep"] = int(nreps)
             results.append(this_result)
     df = pd.DataFrame(results)
+    df.replace({"model": MODELID_NAME_DICT}, inplace=True)
+    df.replace({"lib": LIBID_NAME_DICT}, inplace=True)
     df = df[df.nrep == 10000]
     return df
 
@@ -124,7 +150,7 @@ def plot_accuracy_barplot(df, hue="algo"):
         )
     else:
         g = sns.barplot(x="model", y="total_pass", hue=hue, data=df)
-    two_sp_models = ["00030", "00031"]
+    two_sp_models = ["003-01", "003-02"]
     for p in g.patches:
         if np.isnan(p.get_height()):
             continue
