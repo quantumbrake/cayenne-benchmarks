@@ -252,7 +252,7 @@ def setup_00031():
         Notes
         -----
         A + A --> A2; k = 0.0002
-        A2 --> A + A; k = 0.01
+        A2 --> A + A; k = 0.004
 
         A0 = 1000, max_t = 52, max_iter = 1.5e5
 
