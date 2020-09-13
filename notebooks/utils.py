@@ -23,6 +23,22 @@ ALGO_PALETTE = {
     "tau_adaptive": PALETTE_3[2],
 }
 
+MODEL_ORDER = [
+    "001-01",
+    "001-03",
+    "001-04",
+    "001-05",
+    "001-11",
+    "002-01",
+    "002-02",
+    "002-03",
+    "002-04",
+    "003-01",
+    "003-02",
+    "004-01",
+    "004-02",
+    "004-03",
+]
 MODELID_NAME_DICT = {
     "00001": "001-01",
     "00003": "001-03",
@@ -132,6 +148,7 @@ def plot_accuracy_barplot(df, hue="algo"):
             hue=hue,
             data=df,
             palette=new_palette,
+            order=MODEL_ORDER,
             hue_order=reversed(sorted(new_palette.keys())),
         )
     elif hue == "algo":
@@ -146,10 +163,11 @@ def plot_accuracy_barplot(df, hue="algo"):
             hue=hue,
             data=df,
             palette=new_palette,
+            order=MODEL_ORDER,
             hue_order=reversed(sorted(new_palette.keys())),
         )
     else:
-        g = sns.barplot(x="model", y="total_pass", hue=hue, data=df)
+        g = sns.barplot(x="model", y="total_pass", hue=hue, data=df, order=MODEL_ORDER)
     two_sp_models = ["003-01", "003-02"]
     for p in g.patches:
         if np.isnan(p.get_height()):
@@ -172,15 +190,17 @@ def plot_accuracy_barplot(df, hue="algo"):
             color=color,
             xytext=(0, 10),
             textcoords="offset points",
+            rotation=45,
         )
     plt.legend(
         loc="upper center",
         bbox_to_anchor=(0.5, 1.05),
-        ncol=3,
-        fancybox=True,
-        shadow=True,
+        ncol=5,
+        # fancybox=True,
+        # shadow=True,
     )
-    plt.ylabel("Percentage of total pass")
+    plt.ylabel("Percentage accuracy")
+    plt.xlabel("Model")
     plt.ylim(-5, 120)
 
 

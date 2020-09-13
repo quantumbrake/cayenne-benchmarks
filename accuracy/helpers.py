@@ -502,10 +502,10 @@ def make_plot(
     ax[0, 1].set_ylabel(r"$\sigma$")
     make_ratio_plot(time_arr, mu_obs, mu_analytical, [0.98, 1.02], ax[1, 0])
     ax[1, 0].set_ylabel(r"$\mu$ ratio")
-    ax[1, 0].set_xlabel("time")
+    ax[1, 0].set_xlabel("Time")
     make_ratio_plot(time_arr, std_obs, std_analytical, [0.98, 1.02], ax[1, 1])
     ax[1, 1].set_ylabel(r"$\sigma$ ratio")
-    ax[1, 1].set_xlabel("time")
+    ax[1, 1].set_xlabel("Time")
     green_patch = Line2D(
         [0], [0], marker=".", color="w", markerfacecolor="green", markersize=15
     )
