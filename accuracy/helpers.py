@@ -392,7 +392,11 @@ def read_results_simulation_2sp(
         x_list.append(contents[["S1", "S2"]].values)
         status_list.append(0)
         sim_seeds.append(0)
-    res = Results(t_list, x_list, status_list, algo, sim_seeds)
+    species_names = [f"species_{i}" for i in range(x_list[0].shape[1])]
+    rxn_names = ["X", "Y"]
+    res = Results(
+        species_names, rxn_names, t_list, x_list, status_list, algo, sim_seeds
+    )
     return res
 
 
