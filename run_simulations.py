@@ -22,7 +22,7 @@ def get_cmd(lib, model, algo, nrep):
     elif lib == "BioSimulatorIntp":
         cmd = f"julia biosimjl_test/make_biosim_results.jl {model} {algo} {nrep} True"
     elif lib == "Tellurium":
-        cmd = f"python tellurium_test/make_tel_results.py {model} {nrep}"
+        cmd = f"python tellurium_test/make_tel_results.py {model} {nrep} True"
     elif lib == "GillespieSSA":
         cmd = f"Rscript GillespieSSA_test/make_gillespieSSA_results.R {model} {algo} {nrep}"
     elif lib == "cayenne":
