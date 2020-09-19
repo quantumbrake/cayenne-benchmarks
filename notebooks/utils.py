@@ -8,18 +8,18 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-PALETTE_5 = sns.color_palette("Set1", n_colors=5)
+PALETTE_5 = sns.color_palette("Set2", n_colors=5)
 LIB_PALETTE = {
-    "Cayenne": PALETTE_5[1],
-    "BioSimulator-CI": PALETTE_5[0],
+    "Cayenne": PALETTE_5[0],
+    "BioSimulator-CI": PALETTE_5[1],
     "BioSimulator": PALETTE_5[2],
     "GillespieSSA": PALETTE_5[3],
     "Tellurium": PALETTE_5[4],
 }
-PALETTE_3 = sns.color_palette("Set1", n_colors=3)
+PALETTE_3 = sns.color_palette("Set2", n_colors=3)
 ALGO_PALETTE = {
-    "direct": PALETTE_3[1],
-    "tau_leaping": PALETTE_3[0],
+    "direct": PALETTE_3[0],
+    "tau_leaping": PALETTE_3[1],
     "tau_adaptive": PALETTE_3[2],
 }
 
@@ -196,10 +196,11 @@ def plot_accuracy_barplot(df, hue="algo"):
         loc="upper center",
         bbox_to_anchor=(0.5, 1.05),
         ncol=5,
-        # fancybox=True,
+        fancybox=True,
+        framealpha=1.0,
         # shadow=True,
     )
-    plt.ylabel("Percentage accuracy")
+    plt.ylabel("Accuracy score")
     plt.xlabel("Model")
     plt.ylim(-5, 120)
 
